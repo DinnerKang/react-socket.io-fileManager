@@ -1,3 +1,19 @@
-.login_container{
-	
+
+.margin_center{
+	margin: 0 auto;
+}
+.logo_container{
+	margin-top:150px;
+	text-align:center;
+}
+.login_form{
+	margin-top: 50px;
+}
+.btn_container{
+	height: 266px;
+	text-align: center;
+}
+.btn{
+	width:100%;
+	margin: 10px 0;
 }
