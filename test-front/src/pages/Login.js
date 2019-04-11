@@ -17,8 +17,6 @@ class Login extends Component {
 		return(
 			<Fragment>
 				<article className="container">
-					<div className="row">
-					</div>
 					<div className="col align-self-center logo_container">
 						<img src={this.state.logo} alt="logo"></img>
 					</div>
