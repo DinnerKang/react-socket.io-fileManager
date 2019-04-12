@@ -20,6 +20,8 @@ app.get('/api', (req, res) => {
 
 let database;
 
+
+// 보류
 function connectDB(){
 	var databaseUrl = 'mongodb://localhost:27017/local';
 	
