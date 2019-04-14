@@ -1,4 +1,6 @@
 const User = require('../../models/User');
+const crypto = require('crypto');
+const secret = require('../../config').KEY.secret;
 
 
 
@@ -8,18 +10,31 @@ exports.showAll = (req, res) =>{
 		if(err) return res.status(500).send('User 조회 실패');
 		res.status(200).send(docs);
 	});
+	
 };
 
 // 사용자 추가
 exports.register = (req, res) =>{
-	User.create({
-		id: req.body.id,
-		password : req.body.password
-	},
-	function(err, docs){
-		if(err) return res.status(500).send('User 생성 실패');
-		res.status(200).send(docs);
+	const hash = crypto.createHmac('sha256', secret)
+        .update(req.body.password)
+        .digest('base64');
+	
+	User.find({ id: req.body.id }, function(err, docs){
+		
+		if(docs.length){
+			 return res.status(500).send('User 중복'); 
+		}else{
+			User.create({
+				id: req.body.id,
+				password : hash
+			},
+			function(err, docs){
+				if(err) return res.status(500).send('User 생성 실패');
+				res.status(200).send(docs);
+			});
+		}
 	});
+	
 };
 
 

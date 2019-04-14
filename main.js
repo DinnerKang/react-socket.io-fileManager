@@ -45,7 +45,7 @@ function connectDB(){
 
 
 app.use('/api/users', require('./api/users/users'));
-//app.use('/api/auth', require('./api/auth/auth'));
+app.use('/api/auth', require('./api/auth/auth'));
 
 
 app.listen(port, () =>{

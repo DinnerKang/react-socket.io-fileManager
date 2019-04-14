@@ -1,2 +1,4 @@
 
-
+exports.KEY = {
+    'secret': 'DinnerKang'
+};
