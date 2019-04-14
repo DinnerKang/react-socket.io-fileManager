@@ -1,3 +1,5 @@
 # test_front
 
-IDE 테스트
+1. npm run client-install
+
+2. main.js 의 databaseUrl 설정
