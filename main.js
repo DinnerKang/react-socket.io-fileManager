@@ -15,27 +15,41 @@ app.use(bodyParser.urlencoded({
 app.use(cors());
 
 app.get('/api', (req, res) => {
+	console.log('test--------------------------');
+	testF(database, 'test01', '123456', function(err, docs){
+		console.log(docs);
+	});
   res.send('Hi');
 });
 
 let database;
-
-
+var databaseUrl = 'mongodb://14.38.25.223:27017/local';
 // 보류
 function connectDB(){
-	var databaseUrl = 'mongodb://localhost:27017/local';
-	
-	console.log('DB 연동');
 	mongoose.Promise = global.Promise;
 	mongoose.connect(databaseUrl);
 	database = mongoose.connection;
-	
-	database.on('error', console.error.bind(console, 'mongoose error'));
+	database.on('error', function(){
+		console.log('데이터베이스 error');
+	});
 	database.on('open', function(){
-		console.log('연결 성공');
+		console.log('데이터베이스 연결');
+		testF(database);
 	});
 }
+connectDB();
 
+let testF = function(database){
+	let users = database.collection('users');
+	console.log('testFunc');
+
+	users.find({ "id" : 'test01', "password" : '123456'}).toArray(function(err, docs){
+		if(err){
+			console.log(err, 'errrrrrrrrrrrr');
+		}
+		console.log(docs);
+	});
+};
 
 
 app.use('/api/users', require('./api/users/users'));
