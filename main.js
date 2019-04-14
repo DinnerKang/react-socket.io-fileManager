@@ -44,24 +44,6 @@ function connectDB(){
 }
 
 
-let testF = function(database){
-	let users = database.collection('users');
-	console.log('testFunc');
-
-	users.find({ "id" : 'test01', "password" : '123456'}).toArray(function(err, docs){
-		if(err){
-			console.log(err, 'errrrrrrrrrrrr');
-		}
-		console.log(docs);
-	});
-};
-
-let register = function(database){
-	
-};
-
-
-
 app.use('/api/users', require('./api/users/users'));
 //app.use('/api/auth', require('./api/auth/auth'));
 
