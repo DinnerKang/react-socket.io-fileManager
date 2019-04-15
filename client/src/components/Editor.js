@@ -2,13 +2,13 @@ import React, { Component, Fragment }from 'react';
 import { Button, Form } from 'react-bootstrap';
 
 
-class Editer extends Component{
+class Editor extends Component{
 	
 	render(){
 			return(
 				<Fragment>
 					<div>
-						<h1>Editer</h1>
+						<h1>Editor</h1>
 					</div>
 				</Fragment>
 
@@ -16,4 +16,4 @@ class Editer extends Component{
 	}
 };
 
-export default Editer;
+export default Editor;

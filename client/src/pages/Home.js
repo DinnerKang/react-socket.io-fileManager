@@ -1,8 +1,10 @@
 import React, { Component, Fragment }from 'react';
 import SideMenu from '../components/SideMenu';
-import Editer from '../components/Editer';
+import Editor from '../components/Editor';
 import ConnectUser from '../components/ConnectUser';
 import axios from 'axios';
+
+import '../css/Home.css';
 
 class Home extends Component{
 	componentWillMount(){
@@ -28,11 +30,18 @@ class Home extends Component{
 	render(){
 		return(
 			<Fragment>
-				<article>
-					<SideMenu></SideMenu>
-					<Editer></Editer>
-					<ConnectUser></ConnectUser>
-				</article>
+				<section className="home_container">
+					<article className="sideMenu">
+						<SideMenu></SideMenu>
+					</article>
+					<article className="editor">
+						<Editor></Editor>
+					</article>
+					<article className="connectUser">
+						<ConnectUser></ConnectUser>
+					</article>
+				</section>
+				
 			</Fragment>
 
 		)
