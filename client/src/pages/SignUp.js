@@ -7,7 +7,6 @@ class SignUp extends Component{
 	
 	
 	state = {
-		host : this.props.host,
 		user_id : '',
 		user_pwd : '',
 	};
@@ -19,8 +18,6 @@ class SignUp extends Component{
 	};
 	
 	onSubmit = () =>{
-		console.log(this.state.host);
-		//console.log(this.state.user_id, this.state.user_pwd);
 		const id = this.state.user_id;
 		const password = this.state.user_pwd;
 		// 빈공간 체크
@@ -30,16 +27,23 @@ class SignUp extends Component{
 		}
 		
 		
-		axios.post(`${this.state.host}/api/users`, {id, password}).then(
+		axios.post(`${this.props.host}/api/users`, {id, password}).then(
 			res=>{
 				console.log('회원가입 성공');
 				this.props.history.push('/Login');
+			},
+			err=>{
+				if(err.response.status == 501){
+					alert('이미 사용중인 ID 입니다.');
+				}
+				if(err.response.status == 500){
+					alert('네트워크 오류 입니다.');
+				}
 			}
 		);
 	};
 	
 	render(){
-		
 		return (
 			<Fragment>
 				<article className="container">
@@ -48,7 +52,7 @@ class SignUp extends Component{
 					</div>
 					<div className="col-6 align-self-center margin_center">
 						<Form className="login_form">
-							 <Form.Group controlId="formBasicEmail">
+							 <Form.Group controlId="formBasicText">
 								<Form.Label>ID</Form.Label>
 								<Form.Control type="text" placeholder="ID" name="user_id" 
 									onChange={this.handleChange} value={this.state.user_id}/>

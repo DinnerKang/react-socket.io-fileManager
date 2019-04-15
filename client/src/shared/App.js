@@ -13,8 +13,8 @@ class App extends Component {
 		return(
 			<Fragment>
 				<Route exact path="/" component={Home} />
-				<Route exact path="/Login" component={Login}/>
-				<Route render={ props => <SignUp host={this.state.host}></SignUp> } exact path="/SignUp"/>
+				<Route render={ (props) => <Login {...props} host={this.state.host}></Login> } exact path="/Login"/>
+				<Route render={ (props) => <SignUp {...props} host={this.state.host}></SignUp> } exact path="/SignUp"/>
 			</Fragment>
 		);
 	}

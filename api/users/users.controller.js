@@ -22,7 +22,9 @@ exports.register = (req, res) =>{
 	User.find({ id: req.body.id }, function(err, docs){
 		
 		if(docs.length){
-			 return res.status(500).send('User 중복'); 
+			 return res.status(501).json({
+				 'msg' : 'ID 중복'
+			 });
 		}else{
 			User.create({
 				id: req.body.id,
