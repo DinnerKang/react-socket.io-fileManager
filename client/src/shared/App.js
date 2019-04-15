@@ -12,7 +12,7 @@ class App extends Component {
 	render(){
 		return(
 			<Fragment>
-				<Route exact path="/" component={Home} />
+				<Route render={ (props) => <Home {...props} host={this.state.host}></Home> } exact path="/" />
 				<Route render={ (props) => <Login {...props} host={this.state.host}></Login> } exact path="/Login"/>
 				<Route render={ (props) => <SignUp {...props} host={this.state.host}></SignUp> } exact path="/SignUp"/>
 			</Fragment>

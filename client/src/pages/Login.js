@@ -21,29 +21,43 @@ class Login extends Component {
 			[e.target.name] : e.target.value
 		});
 	};
+	
 
-	onLogin = () =>{
+	onLogin = (e) =>{
+		e.preventDefault();
 			const id = this.state.user_id;
 			const password = this.state.user_pwd;
-			axios.get(`${this.props.host}/api/auth/login`, {id, password}).then(
+			if(!id || !password){
+				alert('다시한번 확인해주세요');
+				return;
+			}
+		
+			axios.post(`${this.props.host}/api/auth/login`, {id, password}).then(
 				res=>{
 					console.log(res);
+					sessionStorage.setItem('user', res.data.token);
+					this.props.history.push('/');
+				},
+				err =>{
+					alert('로그인 오류');
 				}
 			);
 	};
 	
 	render(){
+		
 		return(
+			
 			<Fragment>
 				<article className="container">
 					<div className="col align-self-center logo_container">
 						<img src={this.state.logo} alt="logo"></img>
 					</div>
 					<div className="col-6 align-self-center margin_center">
-						<Form className="login_form">
+						<Form className="login_form" onSubmit={this.onLogin}>
 							 <Form.Group controlId="formBasicEmail">
 								<Form.Label>ID</Form.Label>
-								<Form.Control type="text" placeholder="ID" name="user_id"
+								<Form.Control type="text" placeholder="ID" name="user_id" 
 									onChange={this.handleChange} value={this.state.user_id}/>
 							  </Form.Group>
 
@@ -53,12 +67,12 @@ class Login extends Component {
 									onChange={this.handleChange} value={this.state.user_pwd}/>
 							  </Form.Group>
 							<div className="btn_container">
+							  <Button className="btn" variant="outline-primary" type="submit">
+								Sign in
+							  </Button>
 								<Button className="btn" variant="outline-secondary" type="button"
 									onClick={this.moveSignUp}>
 									Sign up</Button>
-							  <Button className="btn" variant="outline-primary" type="button" onClick={this.onLogin}>
-								Sign in
-							  </Button>
 							</div>
 
 						</Form>

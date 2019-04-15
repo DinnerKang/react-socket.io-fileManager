@@ -30,13 +30,14 @@ class SignUp extends Component{
 		axios.post(`${this.props.host}/api/users`, {id, password}).then(
 			res=>{
 				console.log('회원가입 성공');
+				alert('회원가입이 성공했습니다.');
 				this.props.history.push('/Login');
 			},
 			err=>{
-				if(err.response.status == 501){
+				if(err.response.status === 501){
 					alert('이미 사용중인 ID 입니다.');
 				}
-				if(err.response.status == 500){
+				if(err.response.status === 500){
 					alert('네트워크 오류 입니다.');
 				}
 			}
