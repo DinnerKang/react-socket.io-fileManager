@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const http = require('http');
+const socketio = require('socket.io');
 
 
 // 집
@@ -47,8 +49,9 @@ function connectDB(){
 app.use('/api/users', require('./api/users/users'));
 app.use('/api/auth', require('./api/auth/auth'));
 
-
-app.listen(port, () =>{
-	connectDB();
+let server = http.createServer(app).listen(app.get('port'), function(){
 	console.log('Server port', port);
+	connectDB();
 });
+let io = socketio.listen(server);
+console.log('socket 준비 완료');
