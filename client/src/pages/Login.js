@@ -1,6 +1,6 @@
 import React, { Component, Fragment }from 'react';
 import { Button, Form } from 'react-bootstrap';
-import axios from 'axios';
+import * as service from '../service/auth';
 import '../css/Login.css';
 
 class Login extends Component {
@@ -23,7 +23,7 @@ class Login extends Component {
 	};
 	
 
-	onLogin = (e) =>{
+	onLogin = async (e) =>{
 		e.preventDefault();
 			const id = this.state.user_id;
 			const password = this.state.user_pwd;
@@ -31,8 +31,7 @@ class Login extends Component {
 				alert('다시한번 확인해주세요');
 				return;
 			}
-		
-			axios.post(`${this.props.host}/api/auth/login`, {id, password}).then(
+			await service.onLogin(this.props.host, id, password).then(
 				res=>{
 					console.log(res);
 					sessionStorage.setItem('user', res.data.token);

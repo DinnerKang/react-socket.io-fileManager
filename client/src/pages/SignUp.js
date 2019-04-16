@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import axios from 'axios';
+import * as service from '../service/auth';
+
 import '../css/Login.css';
 
 class SignUp extends Component{
@@ -27,7 +28,7 @@ class SignUp extends Component{
 		}
 		
 		
-		axios.post(`${this.props.host}/api/users`, {id, password}).then(
+		service.signUp(this.props.host, id, password).then(
 			res=>{
 				console.log('회원가입 성공');
 				alert('회원가입이 성공했습니다.');

@@ -1,5 +1,4 @@
 import React, { Component, Fragment }from 'react';
-import { Button, Form } from 'react-bootstrap';
 
 
 class Chat extends Component{

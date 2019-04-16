@@ -1,0 +1,22 @@
+.home_container{
+	overflow-y : hidden;
+}
+
+.side_menu_container{
+	position: fixed !important;
+	padding:50px 0 0 20px;
+	background-color: #21252B;
+	overflow: hidden;
+	z-index : 5;
+}
+.side_menu{
+	left:0;
+	bottom:0;
+}
+.editor_container{
+	margin-top: 50px;
+	margin-left: 250px;
+	border: 1px solid #21252B;
+	width: 1000px;
+	height: calc(100vh - 108px);
+}

@@ -3,7 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const http = require('http');
-const socketio = require('socket.io');
+// const socketio = require('socket.io');
 
 
 // 집
