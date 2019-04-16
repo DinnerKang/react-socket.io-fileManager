@@ -1,15 +1,25 @@
 import React, { Component, Fragment }from 'react';
-import SideMenu from '../components/SideMenu';
+import SideMenu from '../components/Menu/SideMenu';
+import TopMenu from '../components/Menu/TopMenu';
 import Editor from '../components/Editor';
 import ConnectUser from '../components/ConnectUser';
+
 import axios from 'axios';
 
 import '../css/Home.css';
 
+
+
 class Home extends Component{
+	constructor(){
+		super();
+		this.state ={
+			user : sessionStorage.getItem('user_id')
+		};
+	}
+	
 	componentWillMount(){
 		const token = sessionStorage.getItem('user');
-		console.log(token);
 		if(!token){
 			alert('정상적인 접속이 아닙니다 !');
 			return  window.location.href = '/login';
@@ -27,12 +37,16 @@ class Home extends Component{
 		);
 	}
 	
+	
 	render(){
 		return(
 			<Fragment>
 				<section className="home_container">
+					<article className="topMenu">
+						<TopMenu user = {this.state.user}></TopMenu>
+					</article>
 					<article className="sideMenu">
-						<SideMenu></SideMenu>
+						
 					</article>
 					<article className="editor">
 						<Editor></Editor>

@@ -36,6 +36,7 @@ class Login extends Component {
 				res=>{
 					console.log(res);
 					sessionStorage.setItem('user', res.data.token);
+					sessionStorage.setItem('user_id', id);
 					this.props.history.push('/');
 				},
 				err =>{
@@ -45,9 +46,8 @@ class Login extends Component {
 	};
 	
 	render(){
-		
+		sessionStorage.clear();
 		return(
-			
 			<Fragment>
 				<article className="container">
 					<div className="col align-self-center logo_container">

@@ -64,9 +64,10 @@ exports.check = (req, res)=> {
     });
 	
     checkToken.then(
-      token => {
+      decoded => {
         res.status(200).json({
           'status': 200,
+			'id' : decoded.id,
           'msg': '사용자 인증 성공',
         });
       }

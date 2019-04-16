@@ -13,7 +13,6 @@ const socketio = require('socket.io');
 let database;
 
 
-
 const app = express();
 const port = 5000;
 
@@ -49,9 +48,15 @@ function connectDB(){
 app.use('/api/users', require('./api/users/users'));
 app.use('/api/auth', require('./api/auth/auth'));
 
+app.listen(port, () =>{
+	connectDB();
+	console.log('Server port', port);
+});
+
+/*
 let server = http.createServer(app).listen(app.get('port'), function(){
 	console.log('Server port', port);
 	connectDB();
 });
 let io = socketio.listen(server);
-console.log('socket 준비 완료');
+console.log('socket 준비 완료');*/
