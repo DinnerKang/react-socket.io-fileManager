@@ -42,6 +42,7 @@ class SideMenu extends Component{
 			file:null
 		};
         this.onToggle = this.onToggle.bind(this);
+		this.getPath();
     }
     onToggle(node, toggled){
         if(this.state.cursor){this.state.cursor.active = false;}
@@ -71,10 +72,20 @@ class SideMenu extends Component{
 			err=>{
 				console.log(err);
 			}
-		)
+		);
 	};
 
+	getPath = () =>{
+		const user = sessionStorage.getItem('user_id');
+		axios.get(`${this.props.host}/api/file/${user}`).then(
+			res=>{
+				console.log(res);
+			}
+		);
+	}
+
 	render(){
+		
 			return(
 				<Fragment>
 					<form  encType="multipart/form-data" >

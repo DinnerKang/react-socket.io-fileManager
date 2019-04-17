@@ -49,15 +49,6 @@ app.use('/api/auth', require('./api/auth/auth'));
 app.use('/api/file', require('./api/file/file'));
 
 
-/*
-app.post('/api/file', upload.single('myFile'), (req, res)=>{
-	
-	const fileObj = req.file;
-	console.log(fileObj);
-	return res.send('업로드 성공');
-});*/
-
-
 
 app.listen(port, () =>{
 	connectDB();
