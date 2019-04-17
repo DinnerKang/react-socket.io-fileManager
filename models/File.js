@@ -1,8 +1,9 @@
 let mongoose = require('mongoose');
 
 let FileSchema = mongoose.Schema({
-	id: {type :String, required: true, unique: true},
-	password: {type :String, required: true}
+	title: {type :String, required: true, unique: true},
+	orgFileName: {type :String},
+	saveFileName : {type : String}
 });
 
 mongoose.model('file',FileSchema);

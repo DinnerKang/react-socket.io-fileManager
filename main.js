@@ -2,7 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const http = require('http');
+
+
+const serveStatic = require('serve-static');
+const path = require('path');
+
+
+//const http = require('http');
 // const socketio = require('socket.io');
 
 
@@ -21,15 +27,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+app.use('/upload', serveStatic(path.join(__dirname, 'upload')));
 app.use(cors());
-
-app.get('/api', (req, res) => {
-	console.log('test--------------------------');
-	testF(database, 'test01', '123456', function(err, docs){
-		console.log(docs);
-	});
-  res.send('Hi');
-});
 
 
 function connectDB(){
@@ -47,6 +46,18 @@ function connectDB(){
 
 app.use('/api/users', require('./api/users/users'));
 app.use('/api/auth', require('./api/auth/auth'));
+app.use('/api/file', require('./api/file/file'));
+
+
+/*
+app.post('/api/file', upload.single('myFile'), (req, res)=>{
+	
+	const fileObj = req.file;
+	console.log(fileObj);
+	return res.send('업로드 성공');
+});*/
+
+
 
 app.listen(port, () =>{
 	connectDB();

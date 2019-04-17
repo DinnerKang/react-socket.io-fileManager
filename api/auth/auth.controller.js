@@ -4,9 +4,9 @@ const secret = require('../../config').KEY.secret;
 const jwt = require('jsonwebtoken');
 const jwt_secret = 'DinnerKang';
 
+
 // 로그인
 exports.login = (req, res) =>{
-	
 	
 	const hash = crypto.createHmac('sha256', secret)
         .update(req.body.password)
@@ -72,7 +72,5 @@ exports.check = (req, res)=> {
         });
       }
     )	;
-	
 };
-
 

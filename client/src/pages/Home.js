@@ -64,7 +64,7 @@ class Home extends Component{
 						  }}
 							onResizeStop = {this.onResizeStop}
 						>
-						  <SideMenu></SideMenu>
+						  <SideMenu host={this.props.host}></SideMenu>
 					</Resizable>
 					
 					<article className="editor_container" ref="editor_container">
