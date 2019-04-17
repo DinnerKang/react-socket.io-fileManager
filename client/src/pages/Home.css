@@ -14,9 +14,9 @@
 	bottom:0;
 }
 .editor_container{
-	margin-top: 50px;
+	padding-top: 50px;
 	margin-left: 250px;
 	border: 1px solid #21252B;
-	width: 1000px;
-	height: calc(100vh - 108px);
+	width: calc(100% - 250px);
+	height: calc(100vh - 56px);
 }

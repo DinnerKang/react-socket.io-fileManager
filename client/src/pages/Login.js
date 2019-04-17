@@ -1,7 +1,7 @@
 import React, { Component, Fragment }from 'react';
 import { Button, Form } from 'react-bootstrap';
 import * as service from '../service/auth';
-import '../css/Login.css';
+import './Login.css';
 
 class Login extends Component {
 	

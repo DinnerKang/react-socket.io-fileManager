@@ -43,9 +43,8 @@ class Home extends Component{
 	};
 	
 	onResizeStop = (e) =>{
-		console.log(e.clientX);
 		let editor_container = this.refs.editor_container;
-		console.log(editor_container);
+		editor_container.style.width = 'calc(100% - ' + (e.clientX + 50) + 'px)';
 		editor_container.style.marginLeft = (e.clientX + 50) + 'px';
 	}
 
