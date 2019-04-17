@@ -3,7 +3,6 @@ const crypto = require('crypto');
 const secret = require('../../config').KEY.secret;
 
 
-
 // 사용자 전체 리스트
 exports.showAll = (req, res) =>{
 	User.find( {}, function(err, docs){
@@ -36,7 +35,6 @@ exports.register = (req, res) =>{
 			});
 		}
 	});
-	
 };
 
 

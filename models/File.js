@@ -1,11 +1,13 @@
 let mongoose = require('mongoose');
 
 let FileSchema = mongoose.Schema({
-	title: {type :String, required: true, unique: true},
-	orgFileName: {type :String},
-	saveFileName : {type : String}
+	id: {type :String},
+	originalName : {type: String},
+	fileName: {type :String, unique: true},
+	mimeType: {type: String},
+	path: {type : String}
 });
 
-mongoose.model('file',FileSchema);
+mongoose.model('files',FileSchema);
 
-module.exports = mongoose.model('file');
+module.exports = mongoose.model('files');

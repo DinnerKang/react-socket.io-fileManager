@@ -54,8 +54,10 @@ class SideMenu extends Component{
 		
 		let formData = new FormData();
 		const myFile = document.getElementById('myFile').files[0];
-		
-		formData.append('user', sessionStroage.getItem('user_id'));
+		if(!myFile){
+			return;
+		}
+		formData.append('user', sessionStorage.getItem('user_id'));
 		formData.append('myFile', myFile);
 		
 		
@@ -73,7 +75,7 @@ class SideMenu extends Component{
 			return(
 				<Fragment>
 					<form  encType="multipart/form-data" >
-						<input type="file" name="myFile" id="myFile" onChange={this.onChange}></input>
+						<input type="file" name="myFile" id="myFile" onChange={this.onChange} accept=".zip, .tar, .jpg"></input>
 					</form>
 					
 					
