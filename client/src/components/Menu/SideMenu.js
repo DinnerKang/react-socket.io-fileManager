@@ -67,6 +67,9 @@ class SideMenu extends Component{
 		axios.post(`${this.props.host}/api/file`, formData).then(
 			res=>{
 				console.log(res);
+			},
+			err=>{
+				console.log(err);
 			}
 		)
 	};
