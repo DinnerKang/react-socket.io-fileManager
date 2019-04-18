@@ -1,7 +1,7 @@
 import React, { Component, Fragment }from 'react';
 import {Treebeard} from 'react-treebeard';
 import * as service from '../../service/file';
-
+import './SideMenu.css';
 /*
 const data = {
 	id:'root',
@@ -79,6 +79,7 @@ class SideMenu extends Component{
 			},
 			err=>{
 				console.log(err);
+				this.getPath();
 			}
 		);
 	};
@@ -104,8 +105,9 @@ class SideMenu extends Component{
 		if(this.state.path == null){
 			treeLayout = <div>loading</div>;
 		}else if(this.state.path === 'check'){
-			treeLayout = <form  encType="multipart/form-data" >
-						<input type="file" name="myFile" id="myFile" onChange={this.onChange} accept=".zip, .tar, .jpg"></input>
+			treeLayout = <form  encType="multipart/form-data">
+						<label className="file_label">파일 업로드
+						<input type="file" name="myFile" id="myFile" onChange={this.onChange} accept=".zip, .gzip, .gz"></input></label>
 					</form>;
 		}else{
 			treeLayout = <Treebeard

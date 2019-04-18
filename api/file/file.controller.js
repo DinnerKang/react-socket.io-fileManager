@@ -1,7 +1,7 @@
 const Files = require('../../models/File');
 const fs = require('fs');
-const unzipper = require('unzipper');
-const stream = require('stream');
+const unzip = require('node-unzip-2');
+const tar = require('tar');
 
 let dirTree = require("directory-tree");
 let tree;
@@ -14,13 +14,31 @@ function getTree(user){
 
 function unzipFunc(fileObj, user){
 		return new Promise( function(resolve, reject){
-			fs.createReadStream(fileObj.path).pipe(unzipper.Extract({ path: `upload/${user}/${fileObj.uploadedFile.name}` }))
+			fs.mkdir(`upload/${user}`, function(){
+				fs.createReadStream(fileObj.path).pipe(unzip.Extract({ path: `upload/${user}/` }))
 				.on('close', function(){
 					resolve('close');
 				});
+			});
+			
 	});
 }
-
+function untarFunc(fileObj, user){
+	return new Promise( function (resolve, reject){
+		let user_id = user;
+		fs.mkdir(`upload/${user_id}`, function(){
+			console.log('폴더 생성 완료');
+			tar.x(
+			{	cwd : `upload/${user_id}`,
+				file: fileObj.path,
+			}).then( res=> {
+				console.log(fileObj.path);
+				fs.unlink(fileObj.path);
+				resolve('resolve');
+			});
+		});
+	});
+}
 
 exports.fileUpload = (req, res) =>{
 	
@@ -28,25 +46,43 @@ exports.fileUpload = (req, res) =>{
 	const user = req.body.user;
 	console.log(fileObj);
 	console.log(user);
-	
-	
-	
-	unzipFunc(fileObj, user).then(
-		result=>{
-			console.log('res');
-			console.log(result);
-			let path =  getTree(user);
-			return res.status(200).json({
-				path : path
-			});
-		},
-		err=>{
-			return res.status(500).json({
-				'err' : err
+	if(fileObj.uploadedFile.ext === 'zip'){
+		console.log('zip');
+			unzipFunc(fileObj, user).then(
+				result=>{
+					console.log('res');
+					console.log(result);
+					let path =  getTree(user);
+					return res.status(200).json({
+						path : path
+					});
+				},
+				err=>{
+					return res.status(500).json({
+						'err' : err
 
-			});
-		}
-	);
+					});
+				}
+			);
+	}else{
+		console.log('tar');
+		untarFunc(fileObj, user).then(
+				result=>{
+					console.log('tar res');
+					console.log(result);
+					let path =  getTree(user);
+					return res.status(200).json({
+						path : path
+					});
+				},
+				err=>{
+					return res.status(500).json({
+						'err' : err
+
+					});
+				}
+			);
+	}
 };
 
 exports.filePath = (req, res) =>{
@@ -58,7 +94,7 @@ exports.filePath = (req, res) =>{
 		'path' : path,
 		});
 	}else{
-		return res.status(500).json({
+		return res.status(300).json({
 		'path' : 'null',
 		});
 	}
