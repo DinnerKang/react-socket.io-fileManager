@@ -1,7 +1,8 @@
 import React, { Component, Fragment }from 'react';
 import {Treebeard} from 'react-treebeard';
-import axios from 'axios';
+import * as service from '../../service/file';
 
+/*
 const data = {
 	id:'root',
     name: 'root',
@@ -32,18 +33,22 @@ const data = {
             ]
         }
     ]
-};
+};*/
 
 
 class SideMenu extends Component{
+	
+	
 	constructor(props){
         super(props);
         this.state = {
-			file:null
+			treeLayout: '',
+			path : null,
 		};
         this.onToggle = this.onToggle.bind(this);
 		this.getPath();
     }
+	
     onToggle(node, toggled){
         if(this.state.cursor){this.state.cursor.active = false;}
         node.active = true;
@@ -65,9 +70,12 @@ class SideMenu extends Component{
 		console.log(formData.get('myFile'));
 		
 		
-		axios.post(`${this.props.host}/api/file`, formData).then(
+		service.insertFile(this.props.host, formData).then(
 			res=>{
-				console.log(res);
+				let path = res.data.path.children[0];
+				path['id'] = 'root';
+				path['toggled'] = 'true';
+				this.setState({ path : path });
 			},
 			err=>{
 				console.log(err);
@@ -77,34 +85,43 @@ class SideMenu extends Component{
 
 	getPath = () =>{
 		const user = sessionStorage.getItem('user_id');
-		axios.get(`${this.props.host}/api/file/${user}`).then(
+		service.getTree(this.props.host, user).then(
 			res=>{
-				console.log(res);
+				let path = res.data.path.children[0];
+				path['id'] = 'root';
+				path['toggled'] = 'true';
+				this.setState({ path : path });
+			},
+			err=>{
+				this.setState({ path : 'check'});
+				console.log('파일 선택 해야함');
 			}
 		);
 	}
 
 	render(){
-		
-			return(
-				<Fragment>
-					<form  encType="multipart/form-data" >
+		let treeLayout;
+		if(this.state.path == null){
+			treeLayout = <div>loading</div>;
+		}else if(this.state.path === 'check'){
+			treeLayout = <form  encType="multipart/form-data" >
 						<input type="file" name="myFile" id="myFile" onChange={this.onChange} accept=".zip, .tar, .jpg"></input>
-					</form>
-					
-					
-					<Treebeard
-						data={data}
+					</form>;
+		}else{
+			treeLayout = <Treebeard
+						data={this.state.path}
 						onToggle={this.onToggle}
-					/>
-					
-					
-					
-				</Fragment>
-
-			)
+			/>;
+		}
+		 
+		
+		return (
+			<Fragment>
+					{treeLayout}
+			</Fragment>
+		);
 	}
 };
-const content = document.getElementById('content');
+//const content = document.getElementById('content');
 
 export default SideMenu;
