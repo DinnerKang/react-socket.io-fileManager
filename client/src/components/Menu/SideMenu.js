@@ -44,12 +44,17 @@ class SideMenu extends Component{
         this.state = {
 			treeLayout: '',
 			path : null,
+			fileData: null,
 		};
         this.onToggle = this.onToggle.bind(this);
 		this.getPath();
     }
 	
     onToggle(node, toggled){
+		console.log(node);
+		if(node.type === 'file'){
+			this.getFile(node.path);
+		}
         if(this.state.cursor){this.state.cursor.active = false;}
         node.active = true;
         if(node.children){ node.toggled = toggled; }
@@ -98,6 +103,20 @@ class SideMenu extends Component{
 				console.log('파일 선택 해야함');
 			}
 		);
+	}
+	
+	getFile = (path) =>{
+		console.log(path);
+		service.getFile(this.props.host, {path : path}).then(
+			res =>{
+				console.log(res);
+				this.setState({ fileData : res.data });
+				this.props.getFormDataFromParent(res.data);
+			},
+			err =>{
+				console.log(err);
+			}
+		)
 	}
 
 	render(){

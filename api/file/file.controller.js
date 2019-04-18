@@ -17,6 +17,7 @@ function unzipFunc(fileObj, user){
 			fs.mkdir(`upload/${user}`, function(){
 				fs.createReadStream(fileObj.path).pipe(unzip.Extract({ path: `upload/${user}/` }))
 				.on('close', function(){
+					fs.unlink(fileObj.path);
 					resolve('close');
 				});
 			});
@@ -98,5 +99,14 @@ exports.filePath = (req, res) =>{
 		'path' : 'null',
 		});
 	}
+};
+
+exports.fileInfo = (req, res) =>{
+	const path = req.body.path;
+	console.log(path);
+	fs.readFile(path, 'utf8', function(err, data){
+		if(err) return res.status(500).send('Read Error');
+		return res.status(200).send(JSON.stringify(data));
+	});
 	
 };

@@ -15,7 +15,7 @@ class Home extends Component{
 		super();
 		this.state ={
 			user : sessionStorage.getItem('user_id'),
-			test : '',
+			fileData : '',
 		};
 	}
 	
@@ -31,7 +31,7 @@ class Home extends Component{
 			alert('정상적인 접속이 아닙니다 !');
 			return  window.location.href = '/login';
 		}
-		this.state.test = await service.loginCheck(this.props.host, token).then(
+		service.loginCheck(this.props.host, token).then(
 			res=>{
 				console.log(res);
 			},
@@ -47,7 +47,10 @@ class Home extends Component{
 		editor_container.style.width = 'calc(100% - ' + (e.clientX + 50) + 'px)';
 		editor_container.style.marginLeft = (e.clientX + 50) + 'px';
 	}
-
+	getFormData = (data) =>{
+		console.log('home  e', data);
+		this.setState({fileData : data});
+	}
 
 	render(){
 		if(this.state.user){
@@ -64,11 +67,11 @@ class Home extends Component{
 						  }}
 							onResizeStop = {this.onResizeStop}
 						>
-						  <SideMenu host={this.props.host}></SideMenu>
+						  <SideMenu host={this.props.host} getFormDataFromParent = {this.getFormData} ></SideMenu>
 					</Resizable>
 					
 					<article className="editor_container" ref="editor_container">
-						<Editor></Editor>
+						<Editor fileData = {this.state.fileData}></Editor>
 					</article>
 				</section>
 			</Fragment>

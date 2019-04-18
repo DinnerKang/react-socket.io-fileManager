@@ -1,14 +1,21 @@
 import React, { Component, Fragment }from 'react';
-
+import './Editor.css';
 
 class Editor extends Component{
 	
+	constructor(props){
+        super(props);
+        this.state = {
+			treeLayout: '',
+			path : null,
+		};
+    }
+
+
 	render(){
 			return(
 				<Fragment>
-					<div>
-						<h1>Editor</h1>
-					</div>
+					<textarea className="editor" value={this.props.fileData}></textarea>
 				</Fragment>
 
 			)
