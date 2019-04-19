@@ -1,4 +1,23 @@
+ul,li{
+	margin:0;
+	padding:0;
+	list-style: none;
+}
+
 .editor{
 	width: 100%;
     height: 100%;
+}
+
+.editor_header_container{
+	width: 100%;
+	height : 50px;
+}
+.editor_header{
+	width:200px;
+	height : 30px;
+	float:left;
+	margin-top:20px;
+	padding: 2px;
+	border: 1px solid #21252B;
 }

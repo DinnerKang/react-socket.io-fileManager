@@ -108,5 +108,13 @@ exports.fileInfo = (req, res) =>{
 		if(err) return res.status(500).send('Read Error');
 		return res.status(200).send(JSON.stringify(data));
 	});
-	
+};
+
+exports.fileSave = (req, res) =>{
+	const path = req.body.path;
+	const data = req.body.data;
+	fs.writeFile(path, data, 'utf8', function(err){
+		if(err) return res.status(500).send('Write Error');
+		return res.send('성공');
+	});
 };

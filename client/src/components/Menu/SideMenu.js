@@ -2,41 +2,12 @@ import React, { Component, Fragment }from 'react';
 import {Treebeard} from 'react-treebeard';
 import * as service from '../../service/file';
 import './SideMenu.css';
-/*
-const data = {
-	id:'root',
-    name: 'root',
-    toggled: true,
-    children: [
-        {
-            name: 'parent',
-            children: [
-                { name: 'child1' },
-                { name: 'child2' }
-            ]
-        },
-        {
-            name: 'loading parent',
-            loading: true,
-            children: []
-        },
-        {
-            name: 'parent',
-            children: [
-                {
-                    name: 'nested parent',
-                    children: [
-                        { name: 'nested child 1' },
-                        { name: 'nested child 2' }
-                    ]
-                }
-            ]
-        }
-    ]
-};*/
 
+let clicks =0,
+	timeout;
 
 class SideMenu extends Component{
+	
 	
 	
 	constructor(props){
@@ -51,11 +22,24 @@ class SideMenu extends Component{
     }
 	
     onToggle(node, toggled){
-		console.log(node);
-		if(node.type === 'file'){
-			this.getFile(node.path);
+		clicks++;
+		console.log(clicks);
+		if(clicks==1){
+			timeout = setTimeout(function(){
+				clicks = 0;
+			},300);
+		}else{
+			clearTimeout(timeout);
+			if(node.type === 'file'){
+				this.getFile(node.path);
+			}
+			clicks= 0;
 		}
-        if(this.state.cursor){this.state.cursor.active = false;}
+		
+        if(this.state.cursor){
+			this.state.cursor.active = false;
+		}
+		
         node.active = true;
         if(node.children){ node.toggled = toggled; }
         this.setState({ cursor: node });
@@ -111,7 +95,7 @@ class SideMenu extends Component{
 			res =>{
 				console.log(res);
 				this.setState({ fileData : res.data });
-				this.props.getFormDataFromParent(res.data);
+				this.props.getFormDataFromParent(res.data, path);
 			},
 			err =>{
 				console.log(err);

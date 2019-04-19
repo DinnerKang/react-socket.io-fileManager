@@ -16,6 +16,8 @@ class Home extends Component{
 		this.state ={
 			user : sessionStorage.getItem('user_id'),
 			fileData : '',
+			fileSave: '',
+			filePath: '',
 		};
 	}
 	
@@ -47,9 +49,9 @@ class Home extends Component{
 		editor_container.style.width = 'calc(100% - ' + (e.clientX + 50) + 'px)';
 		editor_container.style.marginLeft = (e.clientX + 50) + 'px';
 	}
-	getFormData = (data) =>{
-		console.log('home  e', data);
-		this.setState({fileData : data});
+	getFormData = (data, path) =>{
+		console.log('home  e', data, path);
+		this.setState({fileData : data, filePath: path});
 	}
 
 	render(){
@@ -71,7 +73,7 @@ class Home extends Component{
 					</Resizable>
 					
 					<article className="editor_container" ref="editor_container">
-						<Editor fileData = {this.state.fileData}></Editor>
+						<Editor fileData = {this.state.fileData} path= {this.state.filePath} host={this.props.host} ></Editor>
 					</article>
 				</section>
 			</Fragment>
