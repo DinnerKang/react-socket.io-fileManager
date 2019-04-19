@@ -14,10 +14,25 @@ ul,li{
 	height : 50px;
 }
 .editor_header{
+	position : relative;
 	width:200px;
 	height : 30px;
 	float:left;
 	margin-top:20px;
 	padding: 2px;
 	border: 1px solid #21252B;
+	cursor: pointer;
+	background-color:  #C9C9C9;
+	color: #fff;
+}
+.head_icon{
+	color: #333;
+	position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+	cursor: pointer;
+}
+.head_icon:hover{
+	color: gray;
 }

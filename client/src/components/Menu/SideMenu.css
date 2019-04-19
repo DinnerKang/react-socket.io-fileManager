@@ -25,3 +25,11 @@ input[type="file"]{
 	overflow : hidden;
 	border: 0;
 }
+
+body {
+   -ms-user-select: none; 
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   user-select: none;
+ }
