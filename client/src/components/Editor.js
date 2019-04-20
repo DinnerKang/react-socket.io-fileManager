@@ -46,15 +46,14 @@ class Editor extends Component{
 			this.refs['list_'+head_index].style.backgroundColor = '#C9C9C9';
 			return;
 		}
-		
-	  	this.setState({ 
+	  	this.setState({
+			now_path : nextProps.path,
 			file_data : nextProps.fileData,
 			head_key: this.state.head_key.concat(nextProps.path),
 			head_name: nextProps.path.split('/').length -1,
 			icons : this.state.icons.concat(faTimes)
 		});
 		
-			
 		if(Object.keys(this.refs).length > 0){
 			for(let i=0, len = this.state.head_key.length; i<len ;i++){
 				this.refs['list_'+i].style.backgroundColor = '#5D5D5D';
@@ -69,14 +68,22 @@ class Editor extends Component{
 
 	};
 	closeEditor = (e, idx) =>{
-		if(idx!= 0){
+		
+		if(idx === 0 && !this.refs['list_1']){
+			this.setState({
+				head_key : this.state.head_key.filter(info => info !== e)
+			});
+			this.setState({file_data: '' });
+			return;
+		}
+		
+		if(e === this.state.now_path){
 			if(Object.keys(this.refs).length > 0){
 				for(let i=0, len = this.state.head_key.length; i<len ;i++){
 					this.refs['list_'+i].style.backgroundColor = '#5D5D5D';
 				}
 			}
 			this.refs['list_'+(idx-1)].style.backgroundColor = '#C9C9C9';
-			
 			service.getFile(this.props.host, {path: this.state.head_key[idx-1]} ).then(
 				res =>{
 					this.setState({file_data: res.data });
@@ -84,7 +91,7 @@ class Editor extends Component{
 			);
 		}
 		
-		// service.getFile(this,props.host)
+
 		this.setState({
 			head_key : this.state.head_key.filter(info => info !== e)
 		});
