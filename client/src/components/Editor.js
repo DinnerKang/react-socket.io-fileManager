@@ -2,7 +2,7 @@ import React, { Component, Fragment }from 'react';
 import * as service from '../service/file';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-
+import { Button } from 'react-bootstrap';
 import './Editor.css';
 
 
@@ -19,15 +19,22 @@ class Editor extends Component{
 			icons : [],
 		};
     }
+	// 저장
+	saveFile = () => {
+		service.saveFile(this.props.host, this.state.now_path, this.state.file_data).then(
+			res=> {
+				alert('저장 완료');
+			},
+			err =>{
+				alert('저장 오류');
+			}
+		);
+	}
+	
 	keydownHandler = (e) =>{
 		if(e.ctrlKey && e.keyCode === 83){
 			e.preventDefault();
-			console.log('ctrl + s');
-			service.saveFile(this.props.host, this.props.path, this.state.file_data).then(
-				res=>{
-					console.log(res);
-				}
-			);
+			this.saveFile();
 		}
 	}
 	
@@ -145,12 +152,14 @@ class Editor extends Component{
 					<ul className="editor_header_container">
 						{this.state.head_key.map( (c, idx)=> 
 							<li className="editor_header" id={'list_'+idx} ref={'list_'+idx} key={c} >
-								<div onClick={this.getHeadData.bind(this, c, idx)}>{c.split('/')[this.state.head_name[idx]]}</div>
+								<div onClick={this.getHeadData.bind(this, c, idx)} title={c.split('/')[this.state.head_name[idx]]}>
+									{c.split('/')[this.state.head_name[idx]]}
+								</div>
 							<FontAwesomeIcon className="head_icon" icon={this.state.icons[idx]} onClick={this.closeEditor.bind(this, c, idx)}/></li>)
 						}
 					</ul>
 					<textarea className="editor" value={this.state.file_data} onChange={this.handleChange}></textarea>
-					
+					<Button variant="outline-secondary" className="saveBtn" type="button"  title="Ctrl+S" onClick={this.saveFile}>저장</Button>
 					
 					
 				</Fragment>

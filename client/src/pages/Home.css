@@ -1,5 +1,6 @@
 .home_container{
 	overflow-y : hidden;
+	background-color: #21252B;
 }
 
 .side_menu_container{
@@ -8,13 +9,15 @@
 	background-color: #21252B;
 	overflow: hidden;
 	z-index : 5;
+	border-right : 5px solid #343a40;
 }
 .side_menu{
 	left:0;
 	bottom:0;
 }
 .editor_container{
-	margin-left: 250px;
-	width: calc(100% - 250px);
+	margin-left: 200px;
+	width: calc(100% - 200px);
 	height: calc(100vh - 56px);
+	position: relative;
 }

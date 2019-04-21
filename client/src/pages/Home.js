@@ -46,8 +46,8 @@ class Home extends Component{
 	
 	onResizeStop = (e) =>{
 		let editor_container = this.refs.editor_container;
-		editor_container.style.width = 'calc(100% - ' + (e.clientX + 50) + 'px)';
-		editor_container.style.marginLeft = (e.clientX + 50) + 'px';
+		editor_container.style.width = 'calc(100% - ' + (e.clientX + 10) + 'px)';
+		editor_container.style.marginLeft = (e.clientX + 10) + 'px';
 	}
 	getFormData = (data, path) =>{
 		console.log('home  e', data, path);

@@ -45,3 +45,11 @@ ul,li{
 .head_icon:hover{
 	color: gray;
 }
+.saveBtn{
+	position: absolute;
+    bottom: 20px;
+    right: 30px;
+	width: 60px !important;
+	background-color: #fff;
+	z-index: 3;
+}
