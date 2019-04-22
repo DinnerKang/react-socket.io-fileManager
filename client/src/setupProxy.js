@@ -5,4 +5,8 @@ module.exports = function(app) {
 	  target: "http://localhost:5000/",
 	  changeOrigin: true
   }));
+  app.use(proxy("/socket.io", { 
+	  target: "http://localhost:5000/",
+	  changeOrigin: true
+  }));
 };

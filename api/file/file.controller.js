@@ -8,7 +8,6 @@ let tree;
 
 function getTree(user){
 	tree = dirTree(`upload/${user}/`);
-	console.log('tree', tree);
 	return tree;
 }
 
@@ -45,8 +44,6 @@ exports.fileUpload = (req, res) =>{
 	
 	const fileObj = req.file;
 	const user = req.body.user;
-	console.log(fileObj);
-	console.log(user);
 	if(fileObj.uploadedFile.ext === 'zip'){
 		console.log('zip');
 			unzipFunc(fileObj, user).then(
@@ -89,7 +86,6 @@ exports.fileUpload = (req, res) =>{
 exports.filePath = (req, res) =>{
 	const user = req.params.id;
 	let path = getTree(user);
-	console.log(path);
 	if(path){
 		return res.status(200).json({
 		'path' : path,
@@ -103,7 +99,6 @@ exports.filePath = (req, res) =>{
 
 exports.fileInfo = (req, res) =>{
 	const path = req.body.path;
-	console.log(path);
 	fs.readFile(path, 'utf8', function(err, data){
 		if(err) return res.status(500).send('Read Error');
 		return res.status(200).send(JSON.stringify(data));

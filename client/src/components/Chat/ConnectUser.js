@@ -2,6 +2,12 @@ import React, { Component, Fragment }from 'react';
 import * as service from '../../service/auth';
 import { Button, Form } from 'react-bootstrap';
 import './ConnectUser.css';
+import io from 'socket.io-client';
+
+
+const socket = io('https://test-front-vfbal.run.goorm.io/',{
+	'forceNew': true
+});
 
 class ConnectUser extends Component{
 	constructor(props){
@@ -15,6 +21,16 @@ class ConnectUser extends Component{
 	}
 	componentWillMount(){
 		this.allUsers();
+	};
+	componentDidMount(){
+		
+		socket.emit("login", {
+   	  		 name: 'test',
+   	  		 userid: "test"
+   		 });
+		socket.on("login", function(data) {
+			 	console.log(data);
+		});
 	};
 	showUsers = () =>{
 		let show_all = this.refs.show_all;
@@ -58,6 +74,7 @@ class ConnectUser extends Component{
 	};
 	allChatSend = (e) =>{
 		e.preventDefault();
+		socket.emit("chat", { msg: 'testMsg' });
 	}
 	render(){
 			return(

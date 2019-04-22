@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const serveStatic = require('serve-static');
 const path = require('path');
-
+const socketio = require('socket.io');
 
 
 
@@ -18,7 +18,7 @@ let database;
 
 const app = express();
 const port = 5000;
-
+app.set('port', port);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -40,9 +40,7 @@ function connectDB(){
 		console.log('데이터베이스 연결 성공');
 	});
 }
-app.get('/api', function(req, res) {
-  res.send('test');
-});
+
 
 app.use('/api/users', require('./api/users/users'));
 app.use('/api/auth', require('./api/auth/auth'));
@@ -56,23 +54,33 @@ app.listen(port, () =>{
 });*/
 
 // 소켓 부분
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
 
+const server = require('http').createServer(app).listen(app.get('port'), function(){
+	console.log('서버 시작. 포트 : ' + app.get('port'));
+	connectDB();
+});
+const io = socketio.listen(server);
+console.log('Socket 준비 !');
 
-io.on('connection', ()=>{
-	console.log('Socket 연결 !');
+io.sockets.on('connection', (socket)=>{
+	console.log('socket 연결 됨');
 	
 	socket.on('login', function(data){
-		console.log('Client logged : '+ data);
+		console.log('Client logged-in:\n name:' + data.name + '\n userid: ' + data.userid);
+		io.emit('login', data.name );
 	});
 	
+	socket.on('chat', function(data) {
+   	 console.log('Message ', data.msg);
+    });
+			  
 	socket.on('disconnect', ()=>{
 		console.log('user disconnect');
 	});
 });
-
+/*
 server.listen(port, ()=> {
 	connectDB();
 	console.log('서버 접속 Port :' + port);
 });
+*/
