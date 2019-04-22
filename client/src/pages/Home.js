@@ -2,6 +2,7 @@ import React, { Component, Fragment }from 'react';
 import SideMenu from '../components/Menu/SideMenu';
 import TopMenu from '../components/Menu/TopMenu';
 import Editor from '../components/Editor';
+import ConnectUser from '../components/Chat/ConnectUser';
 
 import * as service from '../service/auth';
 import Resizable from 're-resizable';
@@ -17,16 +18,15 @@ class Home extends Component{
 			user : sessionStorage.getItem('user_id'),
 			fileData : '',
 			fileSave: '',
-			filePath: '',
+			filePath: ''
 		};
+		
 	}
 	
 	componentWillMount(){
 		this.checkLogin();
 	};
-	componentDidMount(){
-		
-	}
+	
 	checkLogin = async () =>{
 		const token = sessionStorage.getItem('user');
 		if(!token){
@@ -43,7 +43,6 @@ class Home extends Component{
 			}
 		);
 	};
-	
 	onResizeStop = (e) =>{
 		let editor_container = this.refs.editor_container;
 		editor_container.style.width = 'calc(100% - ' + (e.clientX + 10) + 'px)';
@@ -74,6 +73,9 @@ class Home extends Component{
 					
 					<article className="editor_container" ref="editor_container">
 						<Editor fileData = {this.state.fileData} path= {this.state.filePath} host={this.props.host} ></Editor>
+					</article>
+					<article className="connectUser_container">
+						<ConnectUser host={this.props.host}></ConnectUser>
 					</article>
 				</section>
 			</Fragment>

@@ -47,7 +47,7 @@ ul,li{
 }
 .saveBtn{
 	position: absolute;
-    bottom: 20px;
+    bottom: 30px;
     right: 30px;
 	width: 60px !important;
 	background-color: #fff;

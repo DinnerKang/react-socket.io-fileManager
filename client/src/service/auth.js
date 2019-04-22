@@ -12,3 +12,7 @@ export function onLogin(host, id, password){
 export function signUp(host, id, password){
 	return axios.post(`${host}/api/users`, {id, password});
 }
+
+export function showAll(host){
+	return axios.get(`${host}/api/users`);
+}

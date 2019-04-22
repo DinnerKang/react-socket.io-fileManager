@@ -14,7 +14,7 @@ class TopMenu extends Component{
 			return(
 				<Fragment>
 					  <Navbar bg="dark" variant="dark">
-						 <span className="logo">goorm</span>
+						 <span className="logo">Cloud</span>
 						<Navbar.Brand className="nav_text">ID : {this.props.user}</Navbar.Brand>
 						<Nav>
 						  <Nav.Link href="/Login" onClick={this.onLogout}>Logout</Nav.Link>

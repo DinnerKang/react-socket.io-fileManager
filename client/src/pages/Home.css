@@ -21,3 +21,8 @@
 	height: calc(100vh - 56px);
 	position: relative;
 }
+.connectUser_container{
+	position: fixed;
+	right: 0;
+	bottom: 0;
+}

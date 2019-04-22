@@ -21,6 +21,9 @@ class Editor extends Component{
     }
 	// 저장
 	saveFile = () => {
+		if(!this.state.now_path){
+			return;
+		}
 		service.saveFile(this.props.host, this.state.now_path, this.state.file_data).then(
 			res=> {
 				alert('저장 완료');

@@ -3,32 +3,30 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-
 const serveStatic = require('serve-static');
 const path = require('path');
 
 
-//const http = require('http');
-// const socketio = require('socket.io');
 
 
 // 집
 //const databaseUrl = 'mongodb://127.0.0.1:27017/local';
 // 구름 IDE
- const databaseUrl = 'mongodb://14.38.25.223:27017/local';
+const databaseUrl = 'mongodb://14.38.25.223:27017/local';
 let database;
 
 
 const app = express();
 const port = 5000;
 
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
-app.use('/upload', serveStatic(path.join(__dirname, 'upload')));
 app.use(cors());
+app.use('/upload', serveStatic(path.join(__dirname, 'upload')));
+
 
 
 function connectDB(){
@@ -42,23 +40,39 @@ function connectDB(){
 		console.log('데이터베이스 연결 성공');
 	});
 }
-
+app.get('/api', function(req, res) {
+  res.send('test');
+});
 
 app.use('/api/users', require('./api/users/users'));
 app.use('/api/auth', require('./api/auth/auth'));
 app.use('/api/file', require('./api/file/file'));
 
 
-
+/*
 app.listen(port, () =>{
 	connectDB();
 	console.log('Server port', port);
+});*/
+
+// 소켓 부분
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
+
+io.on('connection', ()=>{
+	console.log('Socket 연결 !');
+	
+	socket.on('login', function(data){
+		console.log('Client logged : '+ data);
+	});
+	
+	socket.on('disconnect', ()=>{
+		console.log('user disconnect');
+	});
 });
 
-/*
-let server = http.createServer(app).listen(app.get('port'), function(){
-	console.log('Server port', port);
+server.listen(port, ()=> {
 	connectDB();
+	console.log('서버 접속 Port :' + port);
 });
-let io = socketio.listen(server);
-console.log('socket 준비 완료');*/
