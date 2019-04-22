@@ -47,11 +47,6 @@ app.use('/api/auth', require('./api/auth/auth'));
 app.use('/api/file', require('./api/file/file'));
 
 
-/*
-app.listen(port, () =>{
-	connectDB();
-	console.log('Server port', port);
-});*/
 
 // 소켓 부분
 
@@ -60,27 +55,26 @@ const server = require('http').createServer(app).listen(app.get('port'), functio
 	connectDB();
 });
 const io = socketio.listen(server);
-console.log('Socket 준비 !');
+console.log('Socket 준비 !'); 
 
 io.sockets.on('connection', (socket)=>{
 	console.log('socket 연결 됨');
 	
 	socket.on('login', function(data){
-		console.log('Client logged-in:\n name:' + data.name + '\n userid: ' + data.userid);
-		io.emit('login', data.name );
+		console.log('Client logged-in:\n userid: ' + data.user_id);
 	});
 	
-	socket.on('chat', function(data) {
-   	 console.log('Message ', data.msg);
+	socket.on('all_msg', function(data) {
+   	 console.log('Message ', data);
+		
+		if(data.recepient === 'ALL'){
+			io.sockets.emit('all_msg', data);
+		}
     });
 			  
 	socket.on('disconnect', ()=>{
 		console.log('user disconnect');
 	});
+	
+	
 });
-/*
-server.listen(port, ()=> {
-	connectDB();
-	console.log('서버 접속 Port :' + port);
-});
-*/

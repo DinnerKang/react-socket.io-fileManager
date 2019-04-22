@@ -5,8 +5,8 @@ import './ConnectUser.css';
 import io from 'socket.io-client';
 
 
-const socket = io('https://test-front-vfbal.run.goorm.io/',{
-	'forceNew': true
+const socket = io.connect('https://test-front-vfbal.run.goorm.io/',{
+	transport : 'polling'
 });
 
 class ConnectUser extends Component{
@@ -25,11 +25,10 @@ class ConnectUser extends Component{
 	componentDidMount(){
 		
 		socket.emit("login", {
-   	  		 name: 'test',
-   	  		 userid: "test"
+   	  		 user_id: sessionStorage.getItem('user_id')
    		 });
-		socket.on("login", function(data) {
-			 	console.log(data);
+		socket.on('all_msg', function(data){
+			console.log('전체 메세지', data);
 		});
 	};
 	showUsers = () =>{
@@ -74,7 +73,12 @@ class ConnectUser extends Component{
 	};
 	allChatSend = (e) =>{
 		e.preventDefault();
-		socket.emit("chat", { msg: 'testMsg' });
+		socket.emit("all_msg", {
+			sender : sessionStorage.getItem('user_id'),
+			recepient: 'ALL',
+			msg: this.state.all_chat_msg 
+		});
+		this.setState({ all_chat_msg : '' });
 	}
 	render(){
 			return(
@@ -99,7 +103,7 @@ class ConnectUser extends Component{
 								<div className="chatting"></div>
 								<Form onSubmit={this.allChatSend}>
 									<Form.Control type="text" placeholder="메세지" name="all_chat_msg" className="msg_area"
-									onChange={this.handleChange} value={this.state.all_chat_msg}/>
+									onChange={this.handleChange} value={this.state.all_chat_msg} autoComplete="off"/>
 									<Button variant="outline-primary" className="msg_btn" type="submit">
 									보내기
 									  </Button>
