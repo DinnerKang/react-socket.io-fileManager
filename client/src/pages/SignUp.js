@@ -18,7 +18,8 @@ class SignUp extends Component{
 		});
 	};
 	
-	onSubmit = () =>{
+	onSubmit = (e) =>{
+		e.preventDefault();
 		const id = this.state.user_id;
 		const password = this.state.user_pwd;
 		// 빈공간 체크
@@ -53,7 +54,7 @@ class SignUp extends Component{
 						<h1>Sign Up</h1>
 					</div>
 					<div className="col-6 align-self-center margin_center">
-						<Form className="login_form">
+						<Form className="login_form" onSubmit={this.onSubmit}>
 							 <Form.Group controlId="formBasicText">
 								<Form.Label>ID</Form.Label>
 								<Form.Control type="text" placeholder="ID" name="user_id" 
@@ -66,7 +67,7 @@ class SignUp extends Component{
 									onChange={this.handleChange} value={this.state.user_pwd} />
 							  </Form.Group>
 							<div className="btn_container">
-								<Button className="btn" variant="outline-secondary" type="button" onClick={this.onSubmit}>Sign up</Button>
+								<Button className="btn" variant="outline-secondary" type="submit">Sign up</Button>
 							</div>
 						</Form>
 					</div>

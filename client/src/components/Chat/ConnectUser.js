@@ -2,12 +2,10 @@ import React, { Component, Fragment }from 'react';
 import * as service from '../../service/auth';
 import { Button, Form } from 'react-bootstrap';
 import './ConnectUser.css';
-import io from 'socket.io-client';
 
 
-const socket = io.connect('https://test-front-vfbal.run.goorm.io/',{
-	transport : 'polling'
-});
+
+
 
 class ConnectUser extends Component{
 	constructor(props){
@@ -22,15 +20,7 @@ class ConnectUser extends Component{
 	componentWillMount(){
 		this.allUsers();
 	};
-	componentDidMount(){
-		
-		socket.emit("login", {
-   	  		 user_id: sessionStorage.getItem('user_id')
-   		 });
-		socket.on('all_msg', function(data){
-			console.log('전체 메세지', data);
-		});
-	};
+	
 	showUsers = () =>{
 		let show_all = this.refs.show_all;
 		let show_event = this.refs.show_event;
@@ -61,6 +51,7 @@ class ConnectUser extends Component{
 	allUsers = () =>{
 		service.showAll(this.props.host).then(
 			res=>{
+				console.log(res);
 				this.setState({ all_users : res.data })		
 			}
 		);
@@ -73,10 +64,10 @@ class ConnectUser extends Component{
 	};
 	allChatSend = (e) =>{
 		e.preventDefault();
-		socket.emit("all_msg", {
+		this.props.socket.emit("all_msg", {
 			sender : sessionStorage.getItem('user_id'),
 			recepient: 'ALL',
-			msg: this.state.all_chat_msg 
+			message: this.state.all_chat_msg 
 		});
 		this.setState({ all_chat_msg : '' });
 	}
@@ -89,8 +80,8 @@ class ConnectUser extends Component{
 							</div>
 						</li>
 						{this.state.all_users.map( (data) =>
-							<li key={data} className="user_list">
-								<div>{data}
+							<li key={data.id} className="user_list">
+								<div>{data.id}
 								</div>
 							 </li>
 						 )}

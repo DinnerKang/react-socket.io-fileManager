@@ -2,11 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
 const serveStatic = require('serve-static');
 const path = require('path');
 const socketio = require('socket.io');
 
+
+const User = require('./models/User');
 
 
 // 집
@@ -59,9 +60,14 @@ console.log('Socket 준비 !');
 
 io.sockets.on('connection', (socket)=>{
 	console.log('socket 연결 됨');
-	
 	socket.on('login', function(data){
-		console.log('Client logged-in:\n userid: ' + data.user_id);
+		if(data.user_id != null){
+			User.updateOne({ id:  data.user_id}, { $set : {state : true}}, {upsert: true}, function(err, docs){
+				if(err) console.log('update err');
+				console.log('userid: ' + data.user_id);
+				io.sockets.emit('login', data.user_id);
+			});
+		}
 	});
 	
 	socket.on('all_msg', function(data) {
@@ -71,9 +77,24 @@ io.sockets.on('connection', (socket)=>{
 			io.sockets.emit('all_msg', data);
 		}
     });
-			  
-	socket.on('disconnect', ()=>{
-		console.log('user disconnect');
+	
+	socket.on('logout', function(data){
+		console.log('logout',data);
+		if(data.user_id != null){
+			User.update({ id: data.user_id}, { $set : {state : false}}, {upsert: true}, function(err, docs){
+				if(err) console.log('update err');
+				io.sockets.emit('logout');
+			});
+		}
+		
+		
+	});
+	
+	socket.on('disconnect', (reason)=>{
+		console.log('user disconnect', reason);
+		if(reason === 'client namespace disconnect'){
+			console.log('클라에서 끔');
+		}
 	});
 	
 	

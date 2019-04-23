@@ -10,6 +10,11 @@ import Resizable from 're-resizable';
 import './Home.css';
 
 
+import io from 'socket.io-client';
+
+const socket = io.connect('https://test-front-vfbal.run.goorm.io/',{
+	transport : ['websocket']
+});
 
 class Home extends Component{
 	constructor(){
@@ -18,19 +23,38 @@ class Home extends Component{
 			user : sessionStorage.getItem('user_id'),
 			fileData : '',
 			fileSave: '',
-			filePath: ''
+			filePath: '',
 		};
-		
 	}
 	
 	componentWillMount(){
+		window.addEventListener("beforeunload", (ev) => 
+		{  
+			ev.preventDefault();
+			socket.emit('logout',{
+				user_id : sessionStorage.getItem('user_id')
+			});
+		});
 		this.checkLogin();
+	};
+	componentDidMount(){
+
+		socket.emit("login", {
+   	  		 user_id: sessionStorage.getItem('user_id')
+   		 });
+		
+		socket.on('login', function(data){
+			console.log('로그인 했습니다 :', data);
+		});
+		
+		socket.on('logout', function(){
+			socket.disconnect();
+		});
 	};
 	
 	checkLogin = async () =>{
 		const token = sessionStorage.getItem('user');
 		if(!token){
-			alert('정상적인 접속이 아닙니다 !');
 			return  window.location.href = '/login';
 		}
 		service.loginCheck(this.props.host, token).then(
@@ -47,19 +71,19 @@ class Home extends Component{
 		let editor_container = this.refs.editor_container;
 		editor_container.style.width = 'calc(100% - ' + (e.clientX + 10) + 'px)';
 		editor_container.style.marginLeft = (e.clientX + 10) + 'px';
-	}
+	};
 	getFormData = (data, path) =>{
 		console.log('home  e', data, path);
 		this.setState({fileData : data, filePath: path});
-	}
-
+	};
+	
 	render(){
 		if(this.state.user){
 			return(
 			<Fragment>
 				<section className="home_container">
 					<article className="topMenu">
-						<TopMenu user = {this.state.user}></TopMenu>
+						<TopMenu user = {this.state.user} socket = {socket}></TopMenu>
 					</article>
 					<Resizable className="side_menu_container"
 						  defaultSize={{
@@ -75,7 +99,7 @@ class Home extends Component{
 						<Editor fileData = {this.state.fileData} path= {this.state.filePath} host={this.props.host} ></Editor>
 					</article>
 					<article className="connectUser_container">
-						<ConnectUser host={this.props.host}></ConnectUser>
+						<ConnectUser host={this.props.host} socket = {socket}></ConnectUser>
 					</article>
 				</section>
 			</Fragment>

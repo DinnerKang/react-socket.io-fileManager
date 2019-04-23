@@ -59,7 +59,8 @@ exports.check = (req, res)=> {
     const checkToken = new Promise((resolve, reject) => {
       jwt.verify(token, jwt_secret, function (err, decoded) {
         if (err) reject(err);
-        resolve(decoded);
+		  resolve(decoded);
+		
       });
     });
 	

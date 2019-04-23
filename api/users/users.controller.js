@@ -9,11 +9,14 @@ exports.showAll = (req, res) =>{
 		if(err) return res.status(500).send('User 조회 실패');
 		let users =[];
 		for(let i=0, len=docs.length; i< len; i++){
-			users.push(docs[i].id);
+			let data = {
+				id : docs[i].id,
+				state : docs[i].state
+			};
+			users.push(data);
 		}
 		res.status(200).send(users);
 	});
-	
 };
 
 // 사용자 추가
@@ -31,7 +34,8 @@ exports.register = (req, res) =>{
 		}else{
 			User.create({
 				id: req.body.id,
-				password : hash
+				password : hash,
+				state: false
 			},
 			function(err, docs){
 				if(err) return res.status(500).send('User 생성 실패');

@@ -6,6 +6,10 @@ class TopMenu extends Component{
 	
 	
 	onLogout = () =>{
+		this.props.socket.emit('logout', {
+			user_id : sessionStorage.getItem('user_id')
+		});
+		
 		sessionStorage.clear();
 	}
 	
