@@ -1,10 +1,6 @@
 import React, { Component, Fragment }from 'react';
-import * as service from '../../service/auth';
 import { Button, Form } from 'react-bootstrap';
 import './ConnectUser.css';
-
-
-
 
 
 class ConnectUser extends Component{
@@ -14,14 +10,34 @@ class ConnectUser extends Component{
 			show_text : '전체 사용자 보기',
 			show_chat : '전체 채팅',
 			all_chat_msg: '',
+			get_all_chat_msg: [],
 		};
 	}
 	componentWillMount(){
+		const that = this;
 		this.props.socket.on('all_msg', function(data){
-			console.log(data);
+			
+			console.log('전체 메세지',data);
+			let align = [];
+			for(let i =0, len= data.length; i<len;i++){
+				align.unshift(data[i]);
+			}
+			console.log(align);
+			
+			that.setState({get_all_chat_msg : align}, function(){
+				that.refs.chatting.scrollTop = that.refs.chatting.scrollHeight;
+			});
+			
 		});
+		this.props.socket.on('new_all_msg', function(data){
+			that.setState({
+				get_all_chat_msg : that.state.get_all_chat_msg.concat(data)
+			}, function(){ that.refs.chatting.scrollTop = that.refs.chatting.scrollHeight;});
+			console.log('새로운 메시지', data);
+		});
+		
+		
 	};
-	
 	showUsers = () =>{
 		let show_all = this.refs.show_all;
 		let show_event = this.refs.show_event;
@@ -65,6 +81,7 @@ class ConnectUser extends Component{
 	};
 	
 	render(){
+		
 			return(
 				<Fragment>
 					<ul className="show_all" ref="show_all">
@@ -85,8 +102,16 @@ class ConnectUser extends Component{
 						</div>
 						<div className="chat_container">
 							<div className="chat_area" ref="chat_area">
-								<div className="chatting">
-									
+								<div className="chatting" ref="chatting">
+									{this.state.get_all_chat_msg.map(
+									 (c, idx) => {
+										 if(c.sender === sessionStorage.getItem('user_id')){
+											 return <div className="chat_user me" key={idx}><div className="sender">{c.sender}</div> <div>{c.message}</div></div>;
+										 }else{
+											  return <div className="chat_user" key={idx}><div className="sender">{c.sender}</div> <div>{c.message}</div></div>;
+										 }
+									 }
+									)}
 								</div>
 								<Form onSubmit={this.allChatSend}>
 									<Form.Control type="text" placeholder="메세지" name="all_chat_msg" className="msg_area"

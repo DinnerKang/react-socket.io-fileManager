@@ -60,6 +60,7 @@ console.log('Socket 준비 !');
 
 io.sockets.on('connection', (socket)=>{
 	console.log('socket 연결 됨');
+	// 채팅 최근순 50개 제한
 	socket.on('login', function(data){
 		if(data.user_id != null){
 			User.updateOne({ id:  data.user_id}, { $set : {state : true}}, {upsert: true}, function(err, docs){
@@ -70,22 +71,25 @@ io.sockets.on('connection', (socket)=>{
 				});
 			});
 			
-			Chat.find({recepient : 'ALL'}, function(err, docs){
+			
+			Chat.find({recepient : 'ALL'}, {_id:0}, function(err, docs){
 				io.sockets.emit('all_msg', docs);
-			});
+			}).sort({"created": -1}).limit(50);
 		}
 	});
 	
 	socket.on('all_msg', function(data) {
-   	 console.log('Message ', data);
-		if(data.recepient === 'ALL'){
-			io.sockets.emit('all_msg', data);
-		}
+		let date = new Date();
 		Chat.create({
 			sender: data.sender,
 			recepient : data.recepient,
-			message : data.message
+			message : data.message,
+			created: date
 		});
+		if(data.recepient === 'ALL'){
+			io.sockets.emit('new_all_msg', data);
+		}
+		
     });
 	
 	socket.on('logout', function(data){

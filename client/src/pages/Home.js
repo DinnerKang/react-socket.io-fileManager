@@ -29,7 +29,6 @@ class Home extends Component{
 	}
 	
 	componentWillMount(){
-		const that = this;
 		window.addEventListener("beforeunload", (ev) => 
 		{  
 			ev.preventDefault();
@@ -51,7 +50,6 @@ class Home extends Component{
 			console.log('로그인 했습니다 :', data);
 			that.setState({user_info : data});
 		});
-		
 		socket.on('logout', function(data){
 			that.setState({user_info : data});
 			socket.disconnect();

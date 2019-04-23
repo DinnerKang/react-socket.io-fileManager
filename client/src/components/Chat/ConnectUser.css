@@ -6,6 +6,8 @@
 	background-color: #fff;
 	transition: height 1s;
 	text-align: center;
+	overflow-y: auto;
+    overflow-x: hidden;
 }
 .user_list{
     width: 100%;
@@ -45,6 +47,7 @@
 .chatting{
 	width:100%;
 	height: 250px;
+	overflow-y: auto;
 }
 .msg_area{
 	float: left;
@@ -75,4 +78,14 @@
 	background-color: red;
 	border-radius: 50%;
 	margin-left: 50px;
+}
+.chat_user{
+	word-wrap:break-word;
+	margin: 10px;
+}
+.me{
+	text-align: right;
+}
+.sender{
+	font-weight: bold;
 }

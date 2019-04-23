@@ -46,7 +46,6 @@ class Editor extends Component{
 	};
 
 	componentWillReceiveProps(nextProps) {
-		console.log('nextProps', nextProps);
 		if(nextProps.path===""){
 			return;
 		}
