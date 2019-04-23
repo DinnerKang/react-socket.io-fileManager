@@ -24,30 +24,36 @@ class Home extends Component{
 			fileData : '',
 			fileSave: '',
 			filePath: '',
+			user_info:[],
 		};
 	}
 	
 	componentWillMount(){
+		const that = this;
 		window.addEventListener("beforeunload", (ev) => 
 		{  
 			ev.preventDefault();
+			let id = sessionStorage.getItem('user_id');
 			socket.emit('logout',{
-				user_id : sessionStorage.getItem('user_id')
+				user_id : id
 			});
 		});
 		this.checkLogin();
 	};
+	
 	componentDidMount(){
-
+		const that = this;
 		socket.emit("login", {
    	  		 user_id: sessionStorage.getItem('user_id')
    		 });
 		
 		socket.on('login', function(data){
 			console.log('로그인 했습니다 :', data);
+			that.setState({user_info : data});
 		});
 		
-		socket.on('logout', function(){
+		socket.on('logout', function(data){
+			that.setState({user_info : data});
 			socket.disconnect();
 		});
 	};
@@ -67,13 +73,17 @@ class Home extends Component{
 			}
 		);
 	};
+
 	onResizeStop = (e) =>{
 		let editor_container = this.refs.editor_container;
 		editor_container.style.width = 'calc(100% - ' + (e.clientX + 10) + 'px)';
 		editor_container.style.marginLeft = (e.clientX + 10) + 'px';
 	};
+
 	getFormData = (data, path) =>{
-		console.log('home  e', data, path);
+		if(path === null){
+			return;
+		}
 		this.setState({fileData : data, filePath: path});
 	};
 	
@@ -99,7 +109,7 @@ class Home extends Component{
 						<Editor fileData = {this.state.fileData} path= {this.state.filePath} host={this.props.host} ></Editor>
 					</article>
 					<article className="connectUser_container">
-						<ConnectUser host={this.props.host} socket = {socket}></ConnectUser>
+						<ConnectUser host={this.props.host} socket={socket} user_info={this.state.user_info}></ConnectUser>
 					</article>
 				</section>
 			</Fragment>

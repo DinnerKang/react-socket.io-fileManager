@@ -13,12 +13,13 @@ class ConnectUser extends Component{
 		this.state={
 			show_text : '전체 사용자 보기',
 			show_chat : '전체 채팅',
-			all_users: [],
 			all_chat_msg: '',
 		};
 	}
 	componentWillMount(){
-		this.allUsers();
+		this.props.socket.on('all_msg', function(data){
+			console.log(data);
+		});
 	};
 	
 	showUsers = () =>{
@@ -48,15 +49,6 @@ class ConnectUser extends Component{
 		}
 	}
 	
-	allUsers = () =>{
-		service.showAll(this.props.host).then(
-			res=>{
-				console.log(res);
-				this.setState({ all_users : res.data })		
-			}
-		);
-	}
-	
 	handleChange = (e) =>{
 		this.setState({
 			[e.target.name] : e.target.value
@@ -70,7 +62,8 @@ class ConnectUser extends Component{
 			message: this.state.all_chat_msg 
 		});
 		this.setState({ all_chat_msg : '' });
-	}
+	};
+	
 	render(){
 			return(
 				<Fragment>
@@ -79,19 +72,22 @@ class ConnectUser extends Component{
 							<div>{this.state.show_text}
 							</div>
 						</li>
-						{this.state.all_users.map( (data) =>
+						{this.props.user_info.map( (data) =>
 							<li key={data.id} className="user_list">
-								<div>{data.id}
-								</div>
+								<div className="user_text">{data.id}</div>
+								<div className={data.state ? 'active_user' : 'deactive_user'}></div>
 							 </li>
 						 )}
 					</ul>
 					<div className="chat_all_container">
 						<div className="chat_all" ref="chat_all" onClick={this.showAllChat}>
-						{this.state.show_chat}</div>
+							{this.state.show_chat}
+						</div>
 						<div className="chat_container">
 							<div className="chat_area" ref="chat_area">
-								<div className="chatting"></div>
+								<div className="chatting">
+									
+								</div>
 								<Form onSubmit={this.allChatSend}>
 									<Form.Control type="text" placeholder="메세지" name="all_chat_msg" className="msg_area"
 									onChange={this.handleChange} value={this.state.all_chat_msg} autoComplete="off"/>

@@ -46,6 +46,11 @@ class Editor extends Component{
 	};
 
 	componentWillReceiveProps(nextProps) {
+		console.log('nextProps', nextProps);
+		if(nextProps.path===""){
+			return;
+		}
+		
 		// 10개 제한
 		if(this.state.head_key.length === 10){
 			alert('최대 10개까지 띄울수 있습니다.');

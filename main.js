@@ -8,7 +8,7 @@ const socketio = require('socket.io');
 
 
 const User = require('./models/User');
-
+const Chat = require('./models/Chat');
 
 // 집
 //const databaseUrl = 'mongodb://127.0.0.1:27017/local';
@@ -65,17 +65,27 @@ io.sockets.on('connection', (socket)=>{
 			User.updateOne({ id:  data.user_id}, { $set : {state : true}}, {upsert: true}, function(err, docs){
 				if(err) console.log('update err');
 				console.log('userid: ' + data.user_id);
-				io.sockets.emit('login', data.user_id);
+				User.find({}, {_id:0, id :1, state: 1}, function(err, docs){
+					io.sockets.emit('login', docs);
+				});
+			});
+			
+			Chat.find({recepient : 'ALL'}, function(err, docs){
+				io.sockets.emit('all_msg', docs);
 			});
 		}
 	});
 	
 	socket.on('all_msg', function(data) {
    	 console.log('Message ', data);
-		
 		if(data.recepient === 'ALL'){
 			io.sockets.emit('all_msg', data);
 		}
+		Chat.create({
+			sender: data.sender,
+			recepient : data.recepient,
+			message : data.message
+		});
     });
 	
 	socket.on('logout', function(data){
@@ -83,11 +93,11 @@ io.sockets.on('connection', (socket)=>{
 		if(data.user_id != null){
 			User.update({ id: data.user_id}, { $set : {state : false}}, {upsert: true}, function(err, docs){
 				if(err) console.log('update err');
-				io.sockets.emit('logout');
+				User.find({}, {_id:0, id :1, state: 1}, function(err, docs){
+					io.sockets.emit('logout', docs);
+				});
 			});
 		}
-		
-		
 	});
 	
 	socket.on('disconnect', (reason)=>{

@@ -7,15 +7,7 @@ const secret = require('../../config').KEY.secret;
 exports.showAll = (req, res) =>{
 	User.find( {}, function(err, docs){
 		if(err) return res.status(500).send('User 조회 실패');
-		let users =[];
-		for(let i=0, len=docs.length; i< len; i++){
-			let data = {
-				id : docs[i].id,
-				state : docs[i].state
-			};
-			users.push(data);
-		}
-		res.status(200).send(users);
+		res.status(200).send(docs);
 	});
 };
 
