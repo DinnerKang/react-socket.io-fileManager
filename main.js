@@ -10,8 +10,7 @@ const socketio = require('socket.io');
 const User = require('./models/User');
 const Chat = require('./models/Chat');
 
-// 집
-//const databaseUrl = 'mongodb://127.0.0.1:27017/local';
+
 // 구름 IDE
 const databaseUrl = 'mongodb://14.38.25.223:27017/local';
 let database;
