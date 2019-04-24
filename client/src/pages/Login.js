@@ -33,7 +33,7 @@ class Login extends Component {
 			}
 			await service.onLogin(this.props.host, id, password).then(
 				res=>{
-					console.log(res);
+					console.log('로그인 인증 성공',res);
 					sessionStorage.setItem('user', res.data.token);
 					sessionStorage.setItem('user_id', id);
 					this.props.history.push('/');

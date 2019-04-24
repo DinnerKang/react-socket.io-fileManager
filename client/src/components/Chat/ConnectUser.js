@@ -16,13 +16,11 @@ class ConnectUser extends Component{
 	componentWillMount(){
 		const that = this;
 		this.props.socket.on('all_msg', function(data){
-			
 			console.log('전체 메세지',data);
 			let align = [];
 			for(let i =0, len= data.length; i<len;i++){
 				align.unshift(data[i]);
 			}
-			console.log(align);
 			
 			that.setState({get_all_chat_msg : align}, function(){
 				that.refs.chatting.scrollTop = that.refs.chatting.scrollHeight;
@@ -35,7 +33,9 @@ class ConnectUser extends Component{
 			}, function(){ that.refs.chatting.scrollTop = that.refs.chatting.scrollHeight;});
 			console.log('새로운 메시지', data);
 		});
-		
+		this.props.socket.on('whisper', function(data){
+			console.log(data);
+		});
 		
 	};
 	showUsers = () =>{
@@ -45,10 +45,12 @@ class ConnectUser extends Component{
 		if(this.refs.show_event.innerText === '전체 사용자 보기'){
 			this.setState({show_text : '닫기'});
 			show_all.style.height = 'calc(100vh - 56px)';
+			show_all.style.overflowY= 'auto';
 			show_event.classList.add('user_list');
 		}else{
 			this.setState({show_text : '전체 사용자 보기'});
 			show_all.style.height = '25px';
+			show_all.style.overflowY= 'hidden';
 			show_event.classList.remove('user_list');
 		}
 	};
@@ -72,14 +74,20 @@ class ConnectUser extends Component{
 	};
 	allChatSend = (e) =>{
 		e.preventDefault();
-		this.props.socket.emit("all_msg", {
+		this.props.socket.emit("message", {
 			sender : sessionStorage.getItem('user_id'),
 			recepient: 'ALL',
 			message: this.state.all_chat_msg 
 		});
 		this.setState({ all_chat_msg : '' });
 	};
-	
+	whisperSend = (e) =>{
+		this.props.socket.emit("message", {
+			sender : sessionStorage.getItem('user_id'),
+			recepient: 'user',
+			message: this.state.all_chat_msg 
+		});
+	}
 	render(){
 		
 			return(
@@ -106,14 +114,18 @@ class ConnectUser extends Component{
 									{this.state.get_all_chat_msg.map(
 									 (c, idx) => {
 										 if(c.sender === sessionStorage.getItem('user_id')){
-											 return <div className="chat_user me" key={idx}><div className="sender">{c.sender}</div> <div>{c.message}</div></div>;
+											 return <div className="chat_user me" key={idx}>
+													 <div className="sender">{c.sender}</div> <div>{c.message}</div>
+													 </div>;
 										 }else{
-											  return <div className="chat_user" key={idx}><div className="sender">{c.sender}</div> <div>{c.message}</div></div>;
+											  return <div className="chat_user" key={idx}>
+													  <div className="sender">{c.sender}</div> <div>{c.message}</div>
+											  		</div>;
 										 }
 									 }
 									)}
 								</div>
-								<Form onSubmit={this.allChatSend}>
+								<Form onSubmit={this.whisperSend}>
 									<Form.Control type="text" placeholder="메세지" name="all_chat_msg" className="msg_area"
 									onChange={this.handleChange} value={this.state.all_chat_msg} autoComplete="off"/>
 									<Button variant="outline-primary" className="msg_btn" type="submit">

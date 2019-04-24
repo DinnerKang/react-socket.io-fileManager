@@ -6,8 +6,7 @@
 	background-color: #fff;
 	transition: height 1s;
 	text-align: center;
-	overflow-y: auto;
-    overflow-x: hidden;
+	
 }
 .user_list{
     width: 100%;

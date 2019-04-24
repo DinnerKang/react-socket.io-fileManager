@@ -63,7 +63,7 @@ class Home extends Component{
 		}
 		service.loginCheck(this.props.host, token).then(
 			res=>{
-				console.log(res);
+				console.log('사용자 체크 성공', res);
 			},
 			err=>{
 				alert('정상적인 접속이 아닙니다.');

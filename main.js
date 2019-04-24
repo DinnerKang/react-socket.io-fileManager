@@ -58,11 +58,14 @@ const server = require('http').createServer(app).listen(app.get('port'), functio
 const io = socketio.listen(server);
 console.log('Socket 준비 !'); 
 
+let login_ids = {};
+
 io.sockets.on('connection', (socket)=>{
 	console.log('socket 연결 됨');
 	// 채팅 최근순 50개 제한
 	socket.on('login', function(data){
 		if(data.user_id != null){
+			login_ids[data.user_id] = socket.id;
 			User.updateOne({ id:  data.user_id}, { $set : {state : true}}, {upsert: true}, function(err, docs){
 				if(err) console.log('update err');
 				console.log('userid: ' + data.user_id);
@@ -78,19 +81,22 @@ io.sockets.on('connection', (socket)=>{
 		}
 	});
 	
-	socket.on('all_msg', function(data) {
-		let date = new Date();
+	socket.on('message', function(data) {
+		let now_date = new Date();
 		Chat.create({
 			sender: data.sender,
 			recepient : data.recepient,
 			message : data.message,
-			created: date
+			created: now_date
 		});
 		if(data.recepient === 'ALL'){
 			io.sockets.emit('new_all_msg', data);
+		}else{
+			console.log(data);
+			io.sockets.to(login_ids[data.recepient]).emit('whisper', data);
 		}
-		
     });
+	
 	
 	socket.on('logout', function(data){
 		console.log('logout',data);
