@@ -73,13 +73,12 @@ io.sockets.on('connection', (socket)=>{
 					io.sockets.emit('login', docs);
 				});
 			});
-			
-			
 			Chat.find({recepient : 'ALL'}, {_id:0}, function(err, docs){
 				io.sockets.emit('all_msg', docs);
 			}).sort({"created": -1}).limit(50);
 		}
 	});
+	
 	
 	socket.on('message', function(data) {
 		let now_date = new Date();
@@ -93,10 +92,17 @@ io.sockets.on('connection', (socket)=>{
 			io.sockets.emit('new_all_msg', data);
 		}else{
 			console.log(data);
-			io.sockets.to(login_ids[data.recepient]).emit('whisper', data);
+			io.sockets.to(login_ids[data.recepient]).emit('new_whisper', data);
+			io.sockets.to(login_ids[data.sender]).emit('new_whisper', data);
 		}
     });
 	
+	
+	socket.on('whisper_msg', function(data){
+		Chat.find( {$or:[{sender: data.sender,recepient : data.recepient},{sender: data.recepient,recepient : data.sender}]}, {_id:0}, function(err, docs){
+			io.sockets.to(login_ids[data.recepient]).emit('whisper', docs);
+		}).sort({"created": -1}).limit(50);
+	});
 	
 	socket.on('logout', function(data){
 		console.log('logout',data);
