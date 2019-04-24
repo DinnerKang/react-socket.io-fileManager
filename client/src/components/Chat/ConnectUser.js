@@ -96,8 +96,7 @@ class ConnectUser extends Component{
 			
 		this.refs.chat_area.style.top = '-300px';
 		
-		console.log('showWhisperChat');
-		console.log(this.refs);
+		
 		this.refs.all_chat_area.style.display = 'none';
 		this.refs.whisper_chat_area.style.display='block';
 	}
@@ -149,6 +148,7 @@ class ConnectUser extends Component{
 		if(data.id === sessionStorage.getItem('user_id')){
 			return alert('자기 자신에게 귓속말을 보낼수 없습니다');
 		}
+		
 		this.props.socket.emit('whisper_msg', {
 			sender : data.id,
 			recepient: sessionStorage.getItem('user_id'),
@@ -157,6 +157,7 @@ class ConnectUser extends Component{
 		this.setState({ whisper_user: data.id });
 		this.refs.whisper_block.style.display = 'block';
 	};
+
 	render(){
 		
 			return(
