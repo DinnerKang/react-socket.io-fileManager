@@ -12,7 +12,11 @@ const Chat = require('./models/Chat');
 
 
 // 구름 IDE
-const databaseUrl = 'mongodb://14.38.25.223:27017/local';
+//const databaseUrl = 'mongodb://14.38.25.223:27017/local';
+
+// 집
+const databaseUrl = 'mongodb://localhost:27017/local';
+
 let database;
 
 
@@ -119,6 +123,7 @@ io.sockets.on('connection', (socket)=>{
 		console.log('user disconnect', reason);
 		if(reason === 'client namespace disconnect'){
 			console.log('클라에서 끔');
+			delete login_ids[data.user_id];
 		}
 	});
 	

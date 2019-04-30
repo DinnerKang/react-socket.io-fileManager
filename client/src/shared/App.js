@@ -12,8 +12,11 @@ library.add(faStroopwafel);
 
 class App extends Component {
 	
+	
 	state={
-		host : 'https://test-front-vfbal.run.goorm.io',
+		// 구름 IDE
+		//host : 'https://test-front-vfbal.run.goorm.io',
+		host : 'http://localhost:5000',
 	};
 	
 	render(){
