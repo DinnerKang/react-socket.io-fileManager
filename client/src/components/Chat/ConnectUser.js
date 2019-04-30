@@ -170,7 +170,7 @@ class ConnectUser extends Component{
 						{this.props.user_info.map( (data) =>
 							<li key={data.id} className="user_list" onClick={this.whisperUser.bind(this, data)}>
 								<div className="user_text">{data.id}</div>
-								<div className={data.state ? 'active_user' : 'deactive_user'}></div>
+								{/*<div className={data ? 'active_user' : 'deactive_user'}></div>*/}
 							 </li>
 						 )}
 					</ul>

@@ -26,8 +26,7 @@ exports.register = (req, res) =>{
 		}else{
 			User.create({
 				id: req.body.id,
-				password : hash,
-				state: false
+				password : hash
 			},
 			function(err, docs){
 				if(err) return res.status(500).send('User 생성 실패');

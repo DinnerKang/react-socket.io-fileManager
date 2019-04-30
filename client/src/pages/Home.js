@@ -31,6 +31,7 @@ class Home extends Component{
 			fileSave: '',
 			filePath: '',
 			user_info:[],
+			now_user:[],
 		};
 	}
 	
@@ -56,8 +57,13 @@ class Home extends Component{
 			console.log('로그인 했습니다 :', data);
 			that.setState({user_info : data});
 		});
+		
+		socket.on('now_user', function(data){
+			that.setState({now_user : data});
+		});
+
 		socket.on('logout', function(data){
-			that.setState({user_info : data});
+			console.log('logout : ', data);
 			socket.disconnect();
 		});
 	};

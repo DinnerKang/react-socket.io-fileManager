@@ -53,13 +53,12 @@ app.use('/api/file', require('./api/file/file'));
 
 
 // 소켓 부분
-
 const server = require('http').createServer(app).listen(app.get('port'), function(){
 	console.log('서버 시작. 포트 : ' + app.get('port'));
 	connectDB();
 });
 const io = socketio.listen(server);
-console.log('Socket 준비 !'); 
+
 
 let login_ids = {};
 
@@ -69,12 +68,9 @@ io.sockets.on('connection', (socket)=>{
 	socket.on('login', function(data){
 		if(data.user_id != null){
 			login_ids[data.user_id] = socket.id;
-			User.updateOne({ id:  data.user_id}, { $set : {state : true}}, {upsert: true}, function(err, docs){
-				if(err) console.log('update err');
-				console.log('userid: ' + data.user_id);
-				User.find({}, {_id:0, id :1, state: 1}, function(err, docs){
+			User.find({}, {_id:0, id :1}, function(err, docs){
 					io.sockets.emit('login', docs);
-				});
+					io.sockets.emit('now_user', login_ids);
 			});
 			Chat.find({recepient : 'ALL'}, {_id:0}, function(err, docs){
 				io.sockets.emit('all_msg', docs);
@@ -94,7 +90,6 @@ io.sockets.on('connection', (socket)=>{
 		if(data.recepient === 'ALL'){
 			io.sockets.emit('new_all_msg', data);
 		}else{
-			console.log(data);
 			io.sockets.to(login_ids[data.recepient]).emit('new_whisper', data);
 			io.sockets.to(login_ids[data.sender]).emit('new_whisper', data);
 		}
@@ -108,14 +103,10 @@ io.sockets.on('connection', (socket)=>{
 	});
 	
 	socket.on('logout', function(data){
-		console.log('logout',data);
 		if(data.user_id != null){
-			User.update({ id: data.user_id}, { $set : {state : false}}, {upsert: true}, function(err, docs){
-				if(err) console.log('update err');
-				User.find({}, {_id:0, id :1, state: 1}, function(err, docs){
-					io.sockets.emit('logout', docs);
-				});
-			});
+				if(err) console.log('logout err');
+				io.sockets.emit('logout', login_ids[data.user_id]);
+				delete login_ids[data.user_id];
 		}
 	});
 	
@@ -123,9 +114,8 @@ io.sockets.on('connection', (socket)=>{
 		console.log('user disconnect', reason);
 		if(reason === 'client namespace disconnect'){
 			console.log('클라에서 끔');
-			delete login_ids[data.user_id];
+			
 		}
 	});
-	
 	
 });
