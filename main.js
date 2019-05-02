@@ -12,10 +12,10 @@ const Chat = require('./models/Chat');
 
 
 // 구름 IDE
-//const databaseUrl = 'mongodb://14.38.25.223:27017/local';
+const databaseUrl = 'mongodb://14.38.25.223:27017/local';
 
 // 집
-const databaseUrl = 'mongodb://localhost:27017/local';
+//const databaseUrl = 'mongodb://localhost:27017/local';
 
 let database;
 
@@ -38,7 +38,7 @@ function connectDB(){
 	mongoose.connect(databaseUrl);
 	database = mongoose.connection;
 	database.on('error', function(){
-		console.log('데이터베이스 error');
+		console.log('데이터베이스 연결 실패');
 	});
 	database.on('open', function(){
 		console.log('데이터베이스 연결 성공');
@@ -63,10 +63,10 @@ const io = socketio.listen(server);
 let login_ids = {};
 
 io.sockets.on('connection', (socket)=>{
-	console.log('socket 연결 됨');
 	// 채팅 최근순 50개 제한
 	socket.on('login', function(data){
 		if(data.user_id != null){
+			console.log(data.user_id,'님이 입장');
 			login_ids[data.user_id] = socket.id;
 			User.find({}, {_id:0, id :1}, function(err, docs){
 					io.sockets.emit('login', docs);
@@ -104,17 +104,16 @@ io.sockets.on('connection', (socket)=>{
 	
 	socket.on('logout', function(data){
 		if(data.user_id != null){
-				if(err) console.log('logout err');
+				console.log(data.user_id,'님이 퇴장');
+				io.sockets.emit('now_user', login_ids);
 				io.sockets.emit('logout', login_ids[data.user_id]);
 				delete login_ids[data.user_id];
 		}
 	});
 	
 	socket.on('disconnect', (reason)=>{
-		console.log('user disconnect', reason);
 		if(reason === 'client namespace disconnect'){
-			console.log('클라에서 끔');
-			
+			console.log('클라이언트에서 종료');
 		}
 	});
 	

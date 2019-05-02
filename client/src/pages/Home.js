@@ -12,14 +12,14 @@ import './Home.css';
 
 import io from 'socket.io-client';
 
-/* 구름 IDE
+// 구름 IDE
 const socket = io.connect('https://test-front-vfbal.run.goorm.io/',{
 	transport : ['websocket']
-});*/
-// 집
+});
+/* 집
 const socket = io.connect('http://localhost:5000/',{
 	transport : ['websocket']
-});
+});*/
 
 
 class Home extends Component{

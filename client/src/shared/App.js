@@ -15,8 +15,9 @@ class App extends Component {
 	
 	state={
 		// 구름 IDE
-		//host : 'https://test-front-vfbal.run.goorm.io',
-		host : 'http://localhost:5000',
+		host : 'https://test-front-vfbal.run.goorm.io',
+		
+		//host : 'http://localhost:5000',
 	};
 	
 	render(){
