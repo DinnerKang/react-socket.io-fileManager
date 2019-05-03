@@ -15,9 +15,10 @@ module.exports = (server) =>{
 			if(data.user_id != null){
 				console.log(data.user_id,'님이 입장');
 				login_ids[data.user_id] = socket.id;
+				io.sockets.emit('now_user', login_ids);
+				
 				User.find({}, {_id:0, id :1}, function(err, docs){
 						io.sockets.emit('login', docs);
-						io.sockets.emit('now_user', login_ids);
 				});
 				Chat.find({recepient : 'ALL'}, {_id:0}, function(err, docs){
 					io.sockets.emit('all_msg', docs);
@@ -52,14 +53,13 @@ module.exports = (server) =>{
 		socket.on('logout', function(data){
 			if(data.user_id != null){
 					console.log(data.user_id,'님이 퇴장');
-					io.sockets.emit('logout', login_ids[data.user_id]);
 					delete login_ids[data.user_id];
+					io.sockets.emit('logout', login_ids);
 			}
 		});
 
 		socket.on('disconnect', (reason)=>{
 			if(reason === 'client namespace disconnect'){
-				io.sockets.emit('now_user', login_ids);
 				console.log('클라이언트에서 종료');
 			}
 		});

@@ -13,12 +13,12 @@ class ConnectUser extends Component{
 			get_all_chat_msg: [],
 			whisper_user: '',
 			whisper_chat_msg: [],
+			now_user: []
 		};
 	}
 	componentWillMount(){
 		const that = this;
 		this.props.socket.on('all_msg', function(data){
-			console.log('전체 메세지',data);
 			let align = [];
 			for(let i =0, len= data.length; i<len;i++){
 				align.unshift(data[i]);
@@ -56,6 +56,10 @@ class ConnectUser extends Component{
 		});
 		
 	};
+	componentWillReceiveProps(nextProps){
+		this.setState({now_user : nextProps.now_user});
+		
+	}
 	showUsers = () =>{
 		let show_all = this.refs.show_all;
 		let show_event = this.refs.show_event;
@@ -157,6 +161,13 @@ class ConnectUser extends Component{
 		this.setState({ whisper_user: data.id });
 		this.refs.whisper_block.style.display = 'block';
 	};
+	userCheck = (data) =>{
+		let now_user = Object.keys(this.state.now_user);
+		if(now_user.indexOf(data) > -1){
+			return true
+		}
+		return false;
+	};
 
 	render(){
 		
@@ -170,7 +181,7 @@ class ConnectUser extends Component{
 						{this.props.user_info.map( (data) =>
 							<li key={data.id} className="user_list" onClick={this.whisperUser.bind(this, data)}>
 								<div className="user_text">{data.id}</div>
-								{/*<div className={data ? 'active_user' : 'deactive_user'}></div>*/}
+								<div className={this.userCheck(data.id) ? 'active_user' : 'deactive_user'}></div>
 							 </li>
 						 )}
 					</ul>

@@ -60,10 +60,11 @@ class Home extends Component{
 		
 		socket.on('now_user', function(data){
 			that.setState({now_user : data});
+			console.log('now_user', that.state.now_user);
 		});
 
 		socket.on('logout', function(data){
-			console.log('logout : ', data);
+			that.setState({now_user : data});
 			socket.disconnect();
 		});
 	};
@@ -119,7 +120,7 @@ class Home extends Component{
 						<Editor fileData = {this.state.fileData} path= {this.state.filePath} host={this.props.host} ></Editor>
 					</article>
 					<article className="connectUser_container">
-						<ConnectUser host={this.props.host} socket={socket} user_info={this.state.user_info}></ConnectUser>
+						<ConnectUser host={this.props.host} socket={socket} user_info={this.state.user_info} now_user={this.state.now_user}></ConnectUser>
 					</article>
 				</section>
 			</Fragment>
