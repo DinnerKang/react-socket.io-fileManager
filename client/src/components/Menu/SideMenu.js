@@ -23,8 +23,7 @@ class SideMenu extends Component{
 	
     onToggle(node, toggled){
 		clicks++;
-		console.log(clicks);
-		if(clicks==1){
+		if(clicks===1){
 			timeout = setTimeout(function(){
 				clicks = 0;
 			},300);
@@ -54,9 +53,6 @@ class SideMenu extends Component{
 		}
 		formData.append('user', sessionStorage.getItem('user_id'));
 		formData.append('myFile', myFile);
-		
-		
-		console.log(formData.get('myFile'));
 		
 		
 		service.insertFile(this.props.host, formData).then(
@@ -93,7 +89,6 @@ class SideMenu extends Component{
 		console.log(path);
 		service.getFile(this.props.host, {path : path}).then(
 			res =>{
-				console.log(res);
 				this.setState({ fileData : res.data });
 				this.props.getFormDataFromParent(res.data, path);
 			},

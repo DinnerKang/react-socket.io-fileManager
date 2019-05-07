@@ -62,10 +62,8 @@ class Home extends Component{
 			that.setState({now_user : data});
 			console.log('now_user', that.state.now_user);
 		});
-
 		socket.on('logout', function(data){
 			that.setState({now_user : data});
-			socket.disconnect();
 		});
 	};
 	

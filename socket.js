@@ -13,6 +13,7 @@ module.exports = (server) =>{
 		// 채팅 최근순 50개 제한
 		socket.on('login', function(data){
 			if(data.user_id != null){
+			
 				console.log(data.user_id,'님이 입장');
 				login_ids[data.user_id] = socket.id;
 				io.sockets.emit('now_user', login_ids);
@@ -58,11 +59,6 @@ module.exports = (server) =>{
 			}
 		});
 
-		socket.on('disconnect', (reason)=>{
-			if(reason === 'client namespace disconnect'){
-				console.log('클라이언트에서 종료');
-			}
-		});
 
 	});
 
