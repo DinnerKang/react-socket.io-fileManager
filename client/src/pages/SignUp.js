@@ -18,7 +18,7 @@ class SignUp extends Component{
 		});
 	};
 	
-	onSubmit = (e) =>{
+	onSubmit = async(e) =>{
 		e.preventDefault();
 		const id = this.state.user_id;
 		const password = this.state.user_pwd;
@@ -27,23 +27,18 @@ class SignUp extends Component{
 			alert('정확하게 입력해주세요');
 			return;
 		}
-		
-		
-		service.signUp(this.props.host, id, password).then(
-			res=>{
-				console.log('회원가입 성공');
-				alert('회원가입이 성공했습니다.');
-				this.props.history.push('/Login');
-			},
-			err=>{
-				if(err.response.status === 501){
+		try{
+			await service.signUp(this.props.host, id, password);
+			await alert('회원가입이 성공했습니다.');
+			await this.props.history.push('/Login');
+		}catch(e){
+			if(e.response.status === 501){
 					alert('이미 사용중인 ID 입니다.');
-				}
-				if(err.response.status === 500){
-					alert('네트워크 오류 입니다.');
-				}
 			}
-		);
+			if(e.response.status === 500){
+					alert('네트워크 오류 입니다.');
+			}
+		}
 	};
 	
 	render(){

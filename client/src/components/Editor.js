@@ -19,6 +19,8 @@ class Editor extends Component{
 			icons : [],
 		};
     }
+	
+	
 	// 저장
 	saveFile = () => {
 		if(!this.state.now_path){
@@ -104,7 +106,6 @@ class Editor extends Component{
 			this.setState({
 				head_key : this.state.head_key.filter(info => info !== e)
 			});
-			console.log('전체 삭제');
 			this.setState({file_data: ''});
 			return;
 		}
@@ -146,7 +147,6 @@ class Editor extends Component{
 		this.getData(path);
 	};
 	getData = (path) =>{
-		
 		service.getFile(this.props.host, {path: path} ).then(
 				res =>{
 					this.setState({file_data: res.data });
@@ -167,8 +167,6 @@ class Editor extends Component{
 					</ul>
 					<textarea className="editor" value={this.state.file_data} onChange={this.handleChange}></textarea>
 					<Button variant="outline-secondary" className="saveBtn" type="button"  title="Ctrl+S" onClick={this.saveFile}>저장</Button>
-					
-					
 				</Fragment>
 
 			)

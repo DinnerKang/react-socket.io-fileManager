@@ -4,15 +4,16 @@ import * as service from '../service/auth';
 import './Login.css';
 
 class Login extends Component {
-	
-	state = {
-		logo : require('../assets/cloud.jpg'),
-		user_id : '',
-		user_pwd : '',
-	};
+	constructor(props){
+        super(props);
+		this.state = {
+			logo : require('../assets/cloud.jpg'),
+			user_id : '',
+			user_pwd : '',
+		};
+	}
 	
 	moveSignUp = () =>{
-		console.log('MoveSignUp');
 		this.props.history.push('/SignUp');
 	};
 
@@ -31,17 +32,17 @@ class Login extends Component {
 				alert('다시한번 확인해주세요');
 				return;
 			}
-			await service.onLogin(this.props.host, id, password).then(
-				res=>{
-					console.log('로그인 인증 성공',res);
-					sessionStorage.setItem('user', res.data.token);
-					sessionStorage.setItem('user_id', id);
-					this.props.history.push('/');
-				},
-				err =>{
-					alert('로그인 오류');
-				}
-			);
+		try{
+			const loginData = await service.onLogin(this.props.host, id, password);
+			await sessionStorage.setItem('user', loginData.data.token);
+			await sessionStorage.setItem('user_id', id);
+			await this.props.history.push('/');
+		}catch(e){
+			if(e.response.status === 500){
+					alert('네트워크 오류 입니다.');
+			}
+		}
+			
 	};
 	
 	render(){
