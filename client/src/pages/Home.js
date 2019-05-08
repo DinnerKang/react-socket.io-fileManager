@@ -71,14 +71,12 @@ class Home extends Component{
 		if(!token){
 			return  window.location.href = '/login';
 		}
-		
 		try{
 			await service.loginCheck(this.props.host, token);
 		}catch(e){
 			alert('정상적인 접속이 아닙니다.');
 			return  window.location.href = '/login';
 		}
-		
 	};
 
 	onResizeStop = (e) =>{
