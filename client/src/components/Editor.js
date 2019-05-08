@@ -22,18 +22,15 @@ class Editor extends Component{
 	
 	
 	// 저장
-	saveFile = () => {
+	saveFile = async () => {
 		if(!this.state.now_path){
 			return;
 		}
-		service.saveFile(this.props.host, this.state.now_path, this.state.file_data).then(
-			res=> {
-				alert('저장 완료');
-			},
-			err =>{
-				alert('저장 오류');
-			}
-		);
+		try{
+			await service.saveFile(this.props.host, this.state.now_path, this.state.file_data);
+		}catch(e){
+			alert('저장 오류');
+		}
 	}
 	
 	keydownHandler = (e) =>{
@@ -146,12 +143,13 @@ class Editor extends Component{
 		this.refs['list_'+idx].style.backgroundColor = '#C9C9C9';
 		this.getData(path);
 	};
-	getData = (path) =>{
-		service.getFile(this.props.host, {path: path} ).then(
-				res =>{
-					this.setState({file_data: res.data });
-				}
-		);
+	getData = async (path) =>{
+		try{
+			const fileData = await service.getFile(this.props.host, {path: path});
+							await this.setState({file_data: fileData.data });
+		}catch(e){
+			console.log('파일 불러오기 에러');
+		}
 	};
 	render(){
 			return(

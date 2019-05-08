@@ -54,13 +54,12 @@ class Home extends Component{
    		 });
 		
 		socket.on('login', function(data){
-			console.log('로그인 했습니다 :', data);
 			that.setState({user_info : data});
 		});
 		
 		socket.on('now_user', function(data){
 			that.setState({now_user : data});
-			console.log('now_user', that.state.now_user);
+			console.log('현재 사용자 : ', data);
 		});
 		socket.on('logout', function(data){
 			that.setState({now_user : data});
@@ -72,15 +71,14 @@ class Home extends Component{
 		if(!token){
 			return  window.location.href = '/login';
 		}
-		service.loginCheck(this.props.host, token).then(
-			res=>{
-				console.log('사용자 체크 성공', res);
-			},
-			err=>{
-				alert('정상적인 접속이 아닙니다.');
-				return  window.location.href = '/login';
-			}
-		);
+		
+		try{
+			await service.loginCheck(this.props.host, token);
+		}catch(e){
+			alert('정상적인 접속이 아닙니다.');
+			return  window.location.href = '/login';
+		}
+		
 	};
 
 	onResizeStop = (e) =>{

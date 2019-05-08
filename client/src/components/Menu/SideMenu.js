@@ -43,7 +43,7 @@ class SideMenu extends Component{
         if(node.children){ node.toggled = toggled; }
         this.setState({ cursor: node });
     }
-	onChange = (e) =>{
+	onChange = async (e) =>{
 		e.preventDefault();
 		
 		let formData = new FormData();
@@ -54,48 +54,35 @@ class SideMenu extends Component{
 		formData.append('user', sessionStorage.getItem('user_id'));
 		formData.append('myFile', myFile);
 		
-		
-		service.insertFile(this.props.host, formData).then(
-			res=>{
-				let path = res.data.path.children[0];
-				path['id'] = 'root';
-				path['toggled'] = 'true';
-				this.setState({ path : path });
-			},
-			err=>{
-				console.log(err);
-				this.getPath();
-			}
-		);
+		try{
+			const insertFile = await service.insertFile(this.props.host, formData);
+			const path = await insertFile.data.path.children[0];
+			path['id'] = 'root';
+			path['toggled'] = 'true';
+			this.setState({ path : path });
+		}catch(e){
+			this.getPath();
+		}
 	};
 
-	getPath = () =>{
+	getPath = async () =>{
 		const user = sessionStorage.getItem('user_id');
-		service.getTree(this.props.host, user).then(
-			res=>{
-				let path = res.data.path.children[0];
+		try{
+			const getTree = await service.getTree(this.props.host, user);
+			const path = getTree.data.path.children[0];
 				path['id'] = 'root';
 				path['toggled'] = 'true';
 				this.setState({ path : path });
-			},
-			err=>{
-				this.setState({ path : 'check'});
-				console.log('파일 선택 해야함');
-			}
-		);
+		}catch(e){
+			this.setState({ path : 'check'});
+			console.log('파일 선택해야하는 유저');
+		}
 	}
 	
-	getFile = (path) =>{
-		console.log(path);
-		service.getFile(this.props.host, {path : path}).then(
-			res =>{
-				this.setState({ fileData : res.data });
-				this.props.getFormDataFromParent(res.data, path);
-			},
-			err =>{
-				console.log(err);
-			}
-		)
+	getFile = async (path) =>{
+		const getFile = await service.getFile(this.props.host, {path : path});
+		this.setState({ fileData : getFile.data });
+		this.props.getFormDataFromParent(getFile.data, path);
 	}
 
 	render(){
