@@ -22,11 +22,12 @@
  
 ### 구름 IDE 에서 테스트
  - main.js 10번째 줄의 MongoDB 의 위치를 설정해 줍니다.
+ - client/src/client/App.js 17번째 줄의 host 설정을 구름IDE 로 변경해 줍니다.
  - npm run dev
  - https://test-front-vfbal.run.goorm.io/ 접속
  
 ### 로컬에서 테스트
  - main.js 10번째 줄의 MongoDB 의 위치를 설정해 줍니다.
- - client/src/client/App.js 17번째 줄의 host 설정을 http://localhost:5000/ 로 변경해 줍니다.
+ - client/src/client/App.js 17번째 줄의 host 설정을 로컬로 변경해 줍니다.
  - npm run dev
  - http://localhost:3000/ 접속
