@@ -16,6 +16,7 @@ class App extends Component {
 		// 구름 IDE
 		host : 'https://test-front-vfbal.run.goorm.io',
 		
+		// 로컬
 		//host : 'http://localhost:5000',
 	};
 	
