@@ -12,19 +12,12 @@ import './Home.css';
 
 import io from 'socket.io-client';
 
-// 구름 IDE
-const socket = io.connect('https://test-front-vfbal.run.goorm.io/',{
-	transport : ['websocket']
-});
-/* 집
-const socket = io.connect('http://localhost:5000/',{
-	transport : ['websocket']
-});*/
-
 
 class Home extends Component{
-	constructor(){
-		super();
+	
+
+	constructor(props){
+		super(props);
 		this.state ={
 			user : sessionStorage.getItem('user_id'),
 			fileData : '',
@@ -32,6 +25,9 @@ class Home extends Component{
 			filePath: '',
 			user_info:[],
 			now_user:[],
+			socket : io.connect(props.host,{
+				transport : ['websocket']
+			})
 		};
 	}
 	
@@ -40,7 +36,7 @@ class Home extends Component{
 		{  
 			ev.preventDefault();
 			let id = sessionStorage.getItem('user_id');
-			socket.emit('logout',{
+			this.state.socket.emit('logout',{
 				user_id : id
 			});
 		});
@@ -49,19 +45,19 @@ class Home extends Component{
 	
 	componentDidMount(){
 		const that = this;
-		socket.emit("login", {
+		this.state.socket.emit("login", {
    	  		 user_id: sessionStorage.getItem('user_id')
    		 });
 		
-		socket.on('login', function(data){
+		this.state.socket.on('login', function(data){
 			that.setState({user_info : data});
 		});
 		
-		socket.on('now_user', function(data){
+		this.state.socket.on('now_user', function(data){
 			that.setState({now_user : data});
 			console.log('현재 사용자 : ', data);
 		});
-		socket.on('logout', function(data){
+		this.state.socket.on('logout', function(data){
 			that.setState({now_user : data});
 		});
 	};
@@ -98,7 +94,7 @@ class Home extends Component{
 			<Fragment>
 				<section className="home_container">
 					<article className="topMenu">
-						<TopMenu user = {this.state.user} socket = {socket}></TopMenu>
+						<TopMenu user = {this.state.user} socket = {this.state.socket}></TopMenu>
 					</article>
 					<Resizable className="side_menu_container"
 						  defaultSize={{
@@ -114,7 +110,7 @@ class Home extends Component{
 						<Editor fileData = {this.state.fileData} path= {this.state.filePath} host={this.props.host} ></Editor>
 					</article>
 					<article className="connectUser_container">
-						<ConnectUser host={this.props.host} socket={socket} user_info={this.state.user_info} now_user={this.state.now_user}></ConnectUser>
+						<ConnectUser host={this.props.host} socket={this.state.socket} user_info={this.state.user_info} now_user={this.state.now_user}></ConnectUser>
 					</article>
 				</section>
 			</Fragment>
