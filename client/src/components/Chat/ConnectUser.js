@@ -148,7 +148,6 @@ class ConnectUser extends Component{
 	};
 
 	whisperUser = (data) =>{
-		console.log(data);
 		if(data.id === sessionStorage.getItem('user_id')){
 			return alert('자기 자신에게 귓속말을 보낼수 없습니다');
 		}

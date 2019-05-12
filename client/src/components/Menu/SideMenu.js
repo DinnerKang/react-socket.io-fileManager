@@ -8,8 +8,6 @@ let clicks =0,
 
 class SideMenu extends Component{
 	
-	
-	
 	constructor(props){
         super(props);
         this.state = {

@@ -6,16 +6,12 @@ import ConnectUser from '../components/Chat/ConnectUser';
 
 import * as service from '../service/auth';
 import Resizable from 're-resizable';
-
 import './Home.css';
-
-
 import io from 'socket.io-client';
 
 
 class Home extends Component{
 	
-
 	constructor(props){
 		super(props);
 		this.state ={
@@ -35,7 +31,7 @@ class Home extends Component{
 		window.addEventListener("beforeunload", (ev) => 
 		{  
 			ev.preventDefault();
-			let id = sessionStorage.getItem('user_id');
+			const id = sessionStorage.getItem('user_id');
 			this.state.socket.emit('logout',{
 				user_id : id
 			});
