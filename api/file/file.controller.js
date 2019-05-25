@@ -23,11 +23,11 @@ function unzipFunc(fileObj, user){
 			
 	});
 }
+
 function untarFunc(fileObj, user){
 	return new Promise( function (resolve, reject){
 		let user_id = user;
 		fs.mkdir(`upload/${user_id}`, function(){
-			console.log('폴더 생성 완료');
 			tar.x(
 			{	cwd : `upload/${user_id}`,
 				file: fileObj.path,
@@ -40,47 +40,38 @@ function untarFunc(fileObj, user){
 	});
 }
 
-exports.fileUpload = (req, res) =>{
+
+exports.fileUpload = async (req, res) =>{
 	
 	const fileObj = req.file;
 	const user = req.body.user;
+	
 	if(fileObj.uploadedFile.ext === 'zip'){
-		console.log('zip');
-			unzipFunc(fileObj, user).then(
-				result=>{
-					console.log('res');
-					console.log(result);
-					let path =  getTree(user);
-					return res.status(200).json({
-						path : path
+		try{
+			const unzipResult = await unzipFunc(fileObj, user);
+			const path = await getTree(user);
+			return res.status(200).json({
+							path : path
 					});
-				},
-				err=>{
-					return res.status(500).json({
-						'err' : err
-
+		}catch(e){
+			return res.status(500).json({
+						'err' : e
 					});
-				}
-			);
+		}
 	}else{
-		console.log('tar');
-		untarFunc(fileObj, user).then(
-				result=>{
-					console.log('tar res');
-					console.log(result);
-					let path =  getTree(user);
-					return res.status(200).json({
-						path : path
+		try{
+			const unzipResult = await untarFunc(fileObj, user);
+			const path = await getTree(user);
+			return res.status(200).json({
+							path : path
 					});
-				},
-				err=>{
-					return res.status(500).json({
-						'err' : err
-
+		}catch(e){
+			return res.status(500).json({
+						'err' : e
 					});
-				}
-			);
+		}
 	}
+	
 };
 
 exports.filePath = (req, res) =>{
