@@ -27,6 +27,7 @@
     "tar": "^4.4.8"
   },
   "devDependencies": {
+    "fstream": "^1.0.12",
     "nodemon": "^1.18.11"
   }
 }
