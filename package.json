@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "fstream": "^1.0.12",
+    "lodash": "^4.17.13",
     "nodemon": "^1.18.11"
   }
 }
